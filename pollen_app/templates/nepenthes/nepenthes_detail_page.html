@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+
+{% block stylesheets %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'nepenthes/style.css' %}">
+
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="device_content"> 
+
+    <h1>{{device}} ({{device.category}}) </h1>
+    <div class = "connectors">
+        <table>
+            <tr>
+            <th>{% translate "Connectors" %}</th>
+        </tr>
+            {% for connector in device.connector.all %}
+            <tr><td>{{connector}}</td></tr> 
+        {% endfor %}
+        </table>    
+    </div>
+
+    <div class = "firmwares">
+        <table>
+            <caption>{% translate "Firmwares" %}</caption>
+            <tr>
+              <th>{% translate "Firmware Version" %}</th>
+              <th>{% translate "Changelog" %}</th>
+              <th>{% translate "Release Date" %}</th>
+            </tr>
+
+        {% for firmware in device.firmware_set.all %}
+            <tr>
+                <td>{{ firmware.version_number }}</td>
+                <td>{{ firmware.changelog }}</td>
+                {% if firmware.release_date %}
+                <td>{{ firmware.release_date }}</td>
+                {% else %}
+                <td>-</td>
+                {% endif %}
+    
+            </tr>
+     
+        {% endfor %}    
+        
+    </div>
+
+    <div class = "description">
+        {{ device.description }}
+    </div>
+
+    <div class = "vulnerabilities">
+        <table>
+            <caption>Vulnerabilities</caption>
+            <tr>
+              <th>{% translate "Discovered" %}</th>
+              <th>{% translate "Description" %}</th>
+              <th>{% translate "Link to the Paper" %}</th>
+              <th>{% translate "Patch Date" %}</th>
+              <th>{% translate "Link to the Patch Article" %}</th>
+            </tr>
+        {% for vulnerability in device.vulnerability_set.all %}
+        {% if vulnerability.patch_date == None %}
+        <tr class="red_row">
+        {% else %}
+        <tr>
+        {% endif %}        
+            {{vulnerability.patch_url}}
+            <td>{{ vulnerability.discovery }}</td>
+            <td>{{ vulnerability.description }}</td>
+            <td><a href="{{vulnerability.paper_url}}">Paper</a></td>
+            {% if vulnerability.patch_date %}
+            <td>{{ vulnerability.patch_date }}</td>
+            <td><a href="{{vulnerability.url_patch}}">Patch</td>
+            {% else %}
+            <td>-</td>
+            <td>-</td>
+            {% endif %}
+        </tr>
+        {% endfor %}    
+
+    </div>
+
+    <div class = "privacy_information">
+        <table>
+            <caption>{% translate "Privacy Information" %}</caption>
+            <tr>
+                <th>{% translate "Description" %}</th>
+                <th>{% translate "Link to the Paper" %}</th>
+              </tr>
+        {% for privacy_concern in device.DataProtectionInformation_set.all %}
+        <tr>
+            <td>{{ privacy_concern.description }}</td>
+            <td><a href="{{privacy_concern.paper_url}}">Paper</a></td>
+        </tr>
+        {% endfor %}    
+    </div>
+</div>
+
+{% endblock %}

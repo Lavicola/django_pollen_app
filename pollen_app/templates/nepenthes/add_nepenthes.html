@@ -1,0 +1,97 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- bootstrap libs -->
+    {% block bootstrap %}
+        {% include "bootstrap.html" %}
+    {% endblock %}
+    <!-- bootstrap libs end -->
+    <link href="{% static 'css/add_nepenthes.css' %}" rel="stylesheet" type="text/css" media="all">
+    <!-- carousel slider -->
+
+
+</head>
+<body>
+<!-- Navbar -->
+{% block navbar %}
+    {% include "nav.html" %}
+{% endblock %}
+<!-- Navbar End -->
+
+
+<!-- form+css taken form: https://bbbootstrap.com/snippets/bootstrap-5-user-registration-form-82669371-->
+<div class="wrapper">
+    <div class="form-left">
+        <h2 class="text-uppercase">Currently Registered plants</h2>
+
+        <table class="table table-dark">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Sex</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">Nepenthes spectabilis x ventricosa
+                    x hamata x rajah x rokko x lowii x truncata
+                </td>
+                <td>Male</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+    <form action="" method="post" class="form-right" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2 class="text-uppercase">Add a new Nepenthes to your Account</h2>
+        <div class="row">
+            <div class="form-group">
+                <label for="id_nepenthes">Nepenthes Name</label>
+                <input name="nepenthes" id="id_nepenthes" class="form-control" type="text" placeholder="">
+            </div>
+        </div>
+        <div class="form-group mt-4">
+            <label for="flower_status">Flower Status</label>
+            <select name="flower_status" class="form-control" id="flower_status">
+                <option value="0">Currently not Flowering</option>
+                <option value="1">developting a flower</option>
+                <option value="2">blooming</option>
+            </select>
+        </div>
+        <div class="form-group mt-4">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex" id="inlineRadio1" value="0">
+                <label class="form-check-label" for="inlineRadio1">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="sex" id="inlineRadio2" value="1">
+                <label class="form-check-label" for="inlineRadio2">Female</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input checked class="form-check-input" type="radio" name="sex" id="inlineRadio3" value="2">
+                <label class="form-check-label" for="inlineRadio3">Unkown</label>
+            </div>
+        </div>
+        <div class="form-group mt-2">
+            <div class="mb-3">
+                <label for="file" class="form-label">Your Best Pitcher Image (max 500kb)</label>
+                <input type="file" class="form-control" id="image" name="image" accept="image/png,image/jpeg" />
+
+            </div>
+        </div>
+        <div class="form-field"><input type="submit" value="Register" class="register" name="register"></div>
+    </form>
+</div>
+
+
+</body>
+</html>

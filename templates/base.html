@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'nav_style.css' %}">
+    {% block stylesheets %}
+    {% endblock %}
+    {% block javascripts %}
+    {% endblock %}
+
+
+    <title>{% block title %}Nepflow{% endblock %}</title>
+</head>
+
+<body>
+    <div id="nav">
+        {% block navbar %}
+        {% include "nav.html" %}
+        {% endblock %}
+    </div>
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
