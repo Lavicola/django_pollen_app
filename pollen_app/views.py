@@ -43,9 +43,11 @@ def nepenthes_add_page(request):
             image = form.cleaned_data['image']
             nepenthes  = Nepenthes(name=name,sex=sex,flower=flower_status,image=image,owner_id=request.user.id)
             nepenthes.save()
+    if request.method == "GET":
+        template = loader.get_template('nepenthes/add_nepenthes.html')
+        return HttpResponse(template.render(context, request))
 
         return HttpResponse(template.render(context, request))
-    return render(request,"nepenthes/add_nepenthes.html",{"form":addPlantForm})
     template = loader.get_template('nepenthes/add_nepenthes.html')
     return HttpResponse(template.render(context, request))
 

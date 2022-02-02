@@ -8,25 +8,24 @@ from user.models import CustomUser
 from PIL import Image
 
 
-
 # Create your models here.
 
 
 class FLOWER(models.TextChoices):
-    NO_FLOWER = "0","no flower ",
-    SOON_FLOWERING = "1","flowering in development",
-    FLOWERS = "2","flower"
+    NO_FLOWER = "0", "no flower ",
+    SOON_FLOWERING = "1", "flowering in development",
+    FLOWERS = "2", "flower"
+
 
 class SEX(models.TextChoices):
-    MALE = "0","male ",
-    FEMALE = "1","female",
-    UNKOWN = "2","unkown"
-
+    MALE = "0", "male ",
+    FEMALE = "1", "female",
+    UNKOWN = "2", "unkown"
 
 
 class Nepenthes(models.Model):
     id = models.AutoField(primary_key=True)
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=False,null=False)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=False)
     sex = models.CharField(
         max_length=2,
         choices=SEX.choices,
@@ -38,10 +37,23 @@ class Nepenthes(models.Model):
         choices=FLOWER.choices,
         default=FLOWER.NO_FLOWER
     )
+    isHybrid = models.BooleanField(default=False)
     image = models.FileField(upload_to='images')
-    description = models.CharField(max_length=200) # maybe someone wants to point out something interesting about his plant e.g color and so on
+    description = models.CharField(
+        max_length=200)  # maybe someone wants to point out something interesting about his plant e.g color and so on
+
+    def getUsername(self):
+        return CustomUser.objects.filter(id=self.owner_id).first()
+
 
     def save(self):
+        # remove unnecessary word and decide whether it is a hybride or not
+        self.name = self.name.lower().replace("nepenthes ", "")
+        if len(self.name.split(" x ")) > 1:
+            self.isHybrid = True
+        else:
+            self.isHybrid = False
+
         # source: https://stackoverflow.com/questions/52183975/how-to-compress-the-image-before-uploading-to-s3-in-django
         # Opening the uploaded image
         im = Image.open(self.image)
@@ -61,18 +73,12 @@ class Nepenthes(models.Model):
 
         # change the imagefield value to be the newley modifed image value
         self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image.name.split('.')[0], 'image/jpeg',
-                                        sys.getsizeof(output), None)
+                                          sys.getsizeof(output), None)
 
         super(Nepenthes, self).save()
 
-
-
-
-
-
     def __str__(self):
         return self.name
-
 
 
 """

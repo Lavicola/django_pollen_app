@@ -1,30 +1,29 @@
-
 {% load static %}
 
 <!doctype html>
 <html>
 <head>
-<title>Our Funky HTML Page</title>
-<meta name="description" content="Our first page">
-<meta name="keywords" content="html tutorial template">
+    <title>Our Funky HTML Page</title>
+    <meta name="description" content="Our first page">
+    <meta name="keywords" content="html tutorial template">
 
-<!-- bootstrap libs -->
-{% block bootstrap %}
-{% include "bootstrap.html" %}
-{% endblock %}
-<!-- bootstrap libs end -->
+    <!-- bootstrap libs -->
+    {% block bootstrap %}
+        {% include "bootstrap.html" %}
+    {% endblock %}
+    <!-- bootstrap libs end -->
 
-
-<link href="{% static 'css/nepenthes_overview.css' %}" rel="stylesheet" type="text/css" media="all"> <!-- carousel slider -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" media="all" />
-
+    <link href="{% static 'css/nepenthes_overview.css' %}" rel="stylesheet" type="text/css" media="all">
+    <!-- carousel slider -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css" media="all"/>
 
 
 </head>
 <body>
 <!-- Navbar -->
 {% block navbar %}
-{% include "nav.html" %}
+    {% include "nav.html" %}
 {% endblock %}
 <!-- Navbar End -->
 
@@ -39,160 +38,87 @@
         <h6 class="font-weight-bold">Filters</h6>
         <div id="orange"><span class="fa fa-minus"></span></div>
         <form>
-            <div class="form-group"> <input type="checkbox" id="artisan"> <label for="artisan">Must Include</label> </div>
-            <div class="form-group"> <input type="checkbox" id="breakfast"> <label for="breakfast">Contains</label> </div>
-            <div class="form-group"> <input type="checkbox" id="healthy"> <label for="healthy">Male</label> </div>
-            <div class="form-group"> <input type="checkbox" id="healthy"> <label for="healthy">Female</label> </div>
-            <div class="form-group"> <input type="checkbox" id="healthy"> <label for="healthy">blooming</label> </div>
-            <div class="form-group"> <input type="checkbox" id="healthy"> <label for="healthy">soon blooming</label> </div>
-
-        </form>    </div>
+            <div class="form-group"><input type="checkbox" id="m_species"> <label for="artisan">Species</label></div>
+            <div class="form-group"><input type="checkbox" id="m_hybrids"> <label for="breakfast">Hybrids</label></div>
+            <div class="form-group"><input type="checkbox" id="m_male"> <label for="healthy">Male</label></div>
+            <div class="form-group"><input type="checkbox" id="m_female"> <label for="healthy">Female</label></div>
+            <div class="form-group"><input type="checkbox" id="m_blooming"> <label for="healthy">blooming</label></div>
+            <div class="form-group"><input type="checkbox" id="m_soon_blooming"> <label for="healthy">soon
+                blooming</label></div>
+        </form>
+    </div>
 </div>
 <!-- Sidebar filter section -->
 <section id="sidebar">
-    <p> Home | <b>Nepenthes List</b></p>
     <div class="border-bottom pb-2 ml-2">
         <h4 id="burgundy">Filters</h4>
     </div>
-        <form>
-            <div class="form-group"> <input type="checkbox" id="artisan"> <label for="artisan">Must Include</label> </div>
-            <div class="form-group"> <input type="checkbox" id="breakfast"> <label for="breakfast">Contaiins</label> </div>
-            <div class="form-group"> <input type="checkbox" id="healthy"> <label for="healthy">Male</label> </div>
-            <div class="form-group"> <input type="checkbox" id="healthy"> <label for="healthy">Female</label> </div>
-            <div class="form-group"> <input type="checkbox" id="healthy"> <label for="healthy">blooming</label> </div>
-            <div class="form-group"> <input type="checkbox" id="healthy"> <label for="healthy">soon blooming</label> </div>
+    <form>
+        <div class="form-group"><input type="checkbox" checked id="species"> <label for="species">Species</label></div>
+        <div class="form-group"><input type="checkbox" id="hybrid"> <label for="hybrid">Hybrids</label></div>
+        <div class="form-group"><input type="checkbox" id="male"> <label for="male">Male</label></div>
+        <div class="form-group"><input type="checkbox" id="female"> <label for="female">Female</label></div>
+        <div class="form-group"><input type="checkbox" id="blooming"> <label for="blooming">blooming</label></div>
+        <div class="form-group"><input type="checkbox" id="soon_blooming"> <label for="soon_blooming">soon blooming</label>
+        </div>
 
-        </form>
+    </form>
     </div>
 </section>
 <!-- products section -->
-<section id="products">
+<section id="nepenthes_search">
     <div class="container">
-<div class="d-flex">
-<div class="input-group rounded">
-  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-  <span class="input-group-text border-0" id="search-addon">
-      <span class="input-group-text border-0" id="search-addon">
-<span class="fa fa-search text-muted"></span>
-  </span>
-</div>
-</div>
+        <div class="d-flex">
+            <div class="input-group rounded">
 
+                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                       aria-describedby="search-addon"/>
+
+                <button id="search-addon" v-on:click.prevent="getSearchResults">
+                    <span class="fa fa-search text-muted" class="input-group-text border-0"
+                          id="search-addon"></span></span>
+                </button>
+
+            </div>
+        </div>
 
 
         <div class="row">
-            <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
-                <div class="card"> <img class="card-img-top" src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
+            <div class="col-lg-4 col-md-6 col-mr-2 col-sm-10 offset-md-0 offset-sm-1" v-for="nep in nepenthes">
+                <div class="card"><img class="card-img-top"
+                                       src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
                     <div class="card-body">
-                        <h5><b>Nepenthes spectabilis x ventricosa x hamata x rajah x rokko x lowii x truncata</b> </h5>
+                        <h5><b>{[ nep.name]}</b></h5>
                         <div class="d-flex flex-row my-2">
-                              <div class="p-0">Author:</div>
+                            <div class="p-0">Author: {[nep.username["username"]]}</div>
                         </div>
                         <div class="d-flex flex-row my-2">
-                              <div class="p-0">Sex:</div>
+                            <div v-if="nep.sex == 0 ">Sex: Male</div>
+                            <div v-else-if="nep.sex == 1 ">Sex: Female</div>
+                            <div v-else="nep.sex == 2 ">Sex: Unkown</div>
                         </div>
                         <div class="d-flex flex-row my-2">
-                              <div class="p-0">Flower Status:</div>
+                            <div v-if="nep.flower == 0 ">Flower: No Flower</div>
+                            <div v-else-if="nep.flower == 1 ">Flower: Developing Flower</div>
+                            <div v-else="nep.flower == 2 ">Flower:  Flower</div>
                         </div>
                         <div class="d-flex flex-row my-2">
-                              <div class="p-0">Description:</div>
+                            <div class="p-0">Description: {[nep.desccription]}</div>
                         </div>
                         <div class="input-group mb-3">
-                <select class="form-control form-control-sm">
-                    <option>Your Plantlist</option>
-                    <option>Default select</option>
-                </select>
-                <button class="btn btn-outline-secondary" type="button">Call Interest</button>
+                            <select class="form-control form-control-sm">
+                                <option>Your Plantlist</option>
+                                <option>Default select</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="button">Call Interest</button>
 
 
-
-
-
-
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div>
-
-
-                    </div>
-                </div>
-            </div>
-                        <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
-                <div class="card"> <img class="card-img-top" src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
-                    <div class="card-body">
-                        <h5><b>Nepenthes spectabilis x ventricosa x hamata x rajah x rokko x lowii x truncata</b> </h5>
-                        <div class="d-flex flex-row my-2">
-                              <div class="p-0">Author:</div>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
                         </div>
-                        <div class="d-flex flex-row my-2">
-                              <div class="p-0">Sex:</div>
-                        </div>
-                        <div class="d-flex flex-row my-2">
-                              <div class="p-0">Flower Status:</div>
-                        </div>
-                        <div class="d-flex flex-row my-2">
-                              <div class="p-0">Description:</div>
-                        </div>
-                        <div class="input-group mb-3">
-                <select class="form-control form-control-sm">
-                    <option>Your Plantlist</option>
-                    <option>Default select</option>
-                </select>
-                <button class="btn btn-outline-secondary" type="button">Call Interest</button>
-
-
-
-
-
-
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div>
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-10 offset-md-0 offset-sm-1">
-                <div class="card"> <img class="card-img-top" src="https://images.pexels.com/photos/1775043/pexels-photo-1775043.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
-                    <div class="card-body">
-                        <h5><b>Nepenthes spectabilis x ventricosa x hamata x rajah x rokko x lowii x truncata</b> </h5>
-                        <div class="d-flex flex-row my-2">
-                              <div class="p-0">Author:</div>
-                        </div>
-                        <div class="d-flex flex-row my-2">
-                              <div class="p-0">Sex:</div>
-                        </div>
-                        <div class="d-flex flex-row my-2">
-                              <div class="p-0">Flower Status:</div>
-                        </div>
-                        <div class="d-flex flex-row my-2">
-                              <div class="p-0">Description:</div>
-                        </div>
-                        <div class="input-group mb-3">
-                <select class="form-control form-control-sm">
-                    <option>Your Plantlist</option>
-                    <option>Default select</option>
-                </select>
-                <button class="btn btn-outline-secondary" type="button">Call Interest</button>
-
-
-
-
-
-
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-  </div>
-</div>
 
 
                     </div>
@@ -204,19 +130,13 @@
     </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js"
+        integrity="sha512-otOZr2EcknK9a5aa3BbMR9XOjYKtxxscwyRHN6zmdXuRfJ5uApkHB7cz1laWk2g8RKLzV9qv/fl3RPwfCuoxHQ=="
+        crossorigin="anonymous"></script>
 
 
-
-
-  <!-- vue.js files -->
-
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js" integrity="sha512-otOZr2EcknK9a5aa3BbMR9XOjYKtxxscwyRHN6zmdXuRfJ5uApkHB7cz1laWk2g8RKLzV9qv/fl3RPwfCuoxHQ==" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/v-tooltip@2.0.2"></script>
-
-
-
-
+<script src="{% static 'nepenthes_overview.js' %}"></script>
 
 
 </body>
