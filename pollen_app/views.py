@@ -20,8 +20,13 @@ def nepenthes_detail_page(request, nepenthes_name):
 
 def nepenthes_overview_page(request):
     nepenthes = Nepenthes.objects.all()
+    if(request.user.is_authenticated):
+        user_nepenthes = Nepenthes.objects.filter(owner_id=request.user.id)
+    else:
+        user_nepenthes = []
     context = {
         "nepenthes": nepenthes,
+        "user_nepenthes": user_nepenthes,
     }
     template = loader.get_template('nepenthes/nepenthes_overview_page.html')
     return HttpResponse(template.render(context, request))

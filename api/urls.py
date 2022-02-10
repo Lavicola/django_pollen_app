@@ -1,13 +1,9 @@
-from django.urls import include, path
-from rest_framework import routers
-from api.viewsets import NepenthesViewSet
-
-router = routers.DefaultRouter()
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
+from api.views import TransactionView,NepenthesView
 
 
-
-# Wire up our API using automatic URL routing.
 urlpatterns = [
-    path('nepenthes/', NepenthesViewSet.as_view()),
+    path('nepenthes/', NepenthesView.as_view()),
+    path('transaction', TransactionView.as_view()),
 ]
-# Additionally, we include login URLs for the browsable API.

@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 # own settings
 AUTH_USER_MODEL = 'user.CustomUser'
-MEDIA_ROOT  = path.join(BASE_DIR, 'Media')
+MEDIA_ROOT  = path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
 
 STATIC_URL = '/static/'
@@ -44,7 +44,7 @@ STATICFILES_DIRS = [
 ]
 
 
-#
+#own settings end
 
 
 # Application definition

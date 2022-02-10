@@ -54,20 +54,11 @@ class Nepenthes(models.Model):
         else:
             self.isHybrid = False
 
-        # source: https://stackoverflow.com/questions/52183975/how-to-compress-the-image-before-uploading-to-s3-in-django
-        # Opening the uploaded image
         im = Image.open(self.image)
         output = BytesIO()
 
-        original_width, original_height = im.size
-        aspect_ratio = round(original_width / original_height)
-        desired_height = 1920  # Edit to add your desired height in pixels
-        desired_width = desired_height * aspect_ratio
-
-        # Resize/modify the image
-        im = im.resize((desired_width, desired_height))
-
-        # after modifications, save it to the output
+        size = 1024, 256
+        im.thumbnail(size, Image.ANTIALIAS)
         im.save(output, format='JPEG', quality=90)
         output.seek(0)
 
@@ -110,3 +101,25 @@ class Feedback(models.Model):
         default=Rating.POSITIVE
     )
     comment = models.CharField(max_length=100)
+
+class Transaction(models.Model):
+    author = models.ForeignKey(CustomUser,
+                              null=False,
+                              on_delete=models.CASCADE,
+                              )  # author of the post
+    user = models.ForeignKey(CustomUser,
+                               null=False,
+                               on_delete=models.CASCADE,
+                                related_name = "user"
+    ) # interested party
+    author_plant = models.ForeignKey(Nepenthes,null=False,on_delete=models.CASCADE)
+    user_plant = models.ForeignKey(Nepenthes,null=False,on_delete=models.CASCADE,related_name = "user_plant")
+    accepted = models.BooleanField(null=True) # does the author accept?
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["author","user","author_plant","user_plant"],name="unique_transaction")]
+
+
+
+
+
