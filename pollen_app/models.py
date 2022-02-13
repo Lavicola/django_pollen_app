@@ -48,6 +48,8 @@ class Nepenthes(models.Model):
 
     def save(self):
         # remove unnecessary word and decide whether it is a hybride or not
+        fileending = "webp"
+
         self.name = self.name.lower().replace("nepenthes ", "")
         if len(self.name.split(" x ")) > 1:
             self.isHybrid = True
@@ -59,11 +61,11 @@ class Nepenthes(models.Model):
 
         size = 1024, 256
         im.thumbnail(size, Image.ANTIALIAS)
-        im.save(output, format='JPEG', quality=90)
+        im.save(output, format=fileending)
         output.seek(0)
 
         # change the imagefield value to be the newley modifed image value
-        self.image = InMemoryUploadedFile(output, 'ImageField', "%s.jpg" % self.image.name.split('.')[0], 'image/jpeg',
+        self.image = InMemoryUploadedFile(output, 'ImageField', "%s.{}".format(fileending) % self.image.name.split('.')[0], 'image/{}'.format(fileending),
                                           sys.getsizeof(output), None)
 
         super(Nepenthes, self).save()
