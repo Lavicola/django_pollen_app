@@ -57,7 +57,7 @@
         <h4 id="burgundy">Filters</h4>
     </div>
     <form>
-        <div class="form-group"><input type="checkbox" checked id="species"> <label for="species">Species</label></div>
+        <div class="form-group"><input type="checkbox" id="species"> <label for="species">Species</label></div>
         <div class="form-group"><input type="checkbox" id="hybrid"> <label for="hybrid">Hybrids</label></div>
         <div class="form-group"><input type="checkbox" id="male"> <label for="male">Male</label></div>
         <div class="form-group"><input type="checkbox" id="female"> <label for="female">Female</label></div>
@@ -106,7 +106,7 @@
                         <div class="d-flex flex-row my-2">
                             <div v-if="nep.flower == 0 ">Flower: No Flower</div>
                             <div v-else-if="nep.flower == 1 ">Flower: Developing Flower</div>
-                            <div v-else="nep.flower == 2 ">Flower: No Flower</div>
+                            <div v-else="nep.flower == 2 ">Flower: Blooming</div>
                         </div>
                         <div class="input-group mb-3">
                             <select class="form-control-sm" :id="'dropdown_'+nep.id">
@@ -138,6 +138,7 @@
         </div>
     </div>
 </section>
+
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js"

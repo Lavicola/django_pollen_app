@@ -15,6 +15,7 @@ new Vue({
     delimiters: ['{[', ']}'],
     data: {
         csrfTokenName: "csrftoken",
+        all_nepenthes: [],
         nepenthes: [],
         widht_limit: 575, // if it is equal smaller we use mobile filter
     },
@@ -29,7 +30,7 @@ new Vue({
             if (parts.length === 2) return parts.pop().split(';').shift();
         },
         getUserNepenthes: function (id) {
-            return document.getElementById("dropdown_"+id).value;
+            return document.getElementById("dropdown_" + id).value;
 
 
         },
@@ -38,12 +39,11 @@ new Vue({
             let api_base_url = '/api/nepenthes/';
             axios.get(api_base_url)
                 .then((response) => {
-                    this.nepenthes = response.data;
+                    this.all_nepenthes = response.data;
+                    this.nepenthes = this.all_nepenthes;
                 })
         },
         getSearchResults: function () {
-            let api_base_url = '/api/nepenthes/';
-
             let flag = ""
             let width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
             if (width <= this.widht_limit) {
@@ -61,29 +61,74 @@ new Vue({
             let blooming = document.getElementById(flag + "blooming").checked;
             let soon_blooming = document.getElementById(flag + "soon_blooming").checked;
 
+            let gender;
+            let flower_status;
+            let spec;
+
             if (species == false && hybrid == true) {
-                api_base_url += "?isHybrid=" + 0;
-            } else if (species == true && species == false) {
-                api_base_url += "?isHybrid=" + 1;
+                spec = true;
+            } else if (species == true && hybrid == false) {
+                spec = false;
+            } else {
+                spec = DONT_CARE;
             }
 
             if (male == false && female == true) {
-                api_base_url += "?sex=" + 1;
+                gender = SEX.female;
             } else if (male == true && female == false) {
-                api_base_url += "?sex=" + 0;
+                gender = SEX.male;
+            } else {
+                gender = DONT_CARE // we don´t care
             }
 
             if (blooming == false && soon_blooming == true) {
-                api_base_url += "?flower_status=" + 1;
+                flower_status = FLOWER_STATUS.soon_flowering;
             } else if (blooming == true && soon_blooming == false) {
-                api_base_url += "?flower_status=" + 2;
-            }
-            console.log(api_base_url);
+                console.log("BLOOOOOM");
+                flower_status = FLOWER_STATUS.flowering;
+            } else {
 
-            axios.get(api_base_url)
-                .then((response) => {
-                    this.nepenthes = response.data;
-                })
+                flower_status = DONT_CARE; // we don´t care
+            }
+
+            console.log(flower_status);
+            let search_results = [];
+            for (const element of this.all_nepenthes) {
+                let condition = {
+                    condition1: false,
+                    condition2: false,
+                    condition3: false,
+                }
+
+
+                if (element["isHybrid"] == spec || spec === DONT_CARE) {
+                    condition.condition1 = true;
+                }
+
+                if (element["sex"] == gender || gender == DONT_CARE) {
+                    condition.condition2 = true;
+                }
+
+
+                if (element["flower"] == flower_status || flower_status == DONT_CARE) {
+                    console.log(flower_status);
+                    console.log(element["flower"]);
+                    console.log("------------------");
+
+                    condition.condition3 = true;
+                }
+
+
+                if (condition.condition1 && condition.condition2 && condition.condition3) {
+                    console.log("TRUE");
+                    search_results.push(element);
+                }
+
+            }
+
+            this.nepenthes = search_results;
+
+
         }, sendOffer: function (id, username) {
             let csrf_token = this.getToken(this.csrfTokenName);
             //https://www.section.io/engineering-education/ajax-request-in-django-using-axios/
@@ -104,3 +149,20 @@ new Vue({
         },
     }
 });
+
+const DONT_CARE = -1;
+
+const SEX = {
+    male: 0,
+    female: 1,
+};
+
+const FLOWER_STATUS = {
+    no_flower: 0,
+    soon_flowering: 1,
+    flowering: 2,
+};
+
+
+
+
