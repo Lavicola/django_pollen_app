@@ -25,4 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/",include("api.urls")),
     path("nepenthes/", include("pollen_app.urls")),
-] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    path("login", pollen_app.views.login,name="login"),
+    path('verification/', include('verify_email.urls')),
+  ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

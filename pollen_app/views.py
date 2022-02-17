@@ -3,6 +3,7 @@ from django.template import loader
 from pollen_app.models import Nepenthes
 from pollen_app.forms import addPlantForm
 from pollen_app.forms import UserRegistrationForm
+from verify_email.email_handler import send_verification_email
 
 
 # Create your views here.
@@ -55,17 +56,19 @@ def nepenthes_add_page(request):
     template = loader.get_template('nepenthes/add_nepenthes.html')
     return HttpResponse(template.render(context, request))
 
-#TODO verify email before registering an user
 def register(request):
     context = {}
     template = loader.get_template('nepenthes/register.html')
     if (request.method == "GET"):
         template = loader.get_template('nepenthes/register.html')
     if (request.method == "POST"):
-        #TODO redirect to another view to inform the user to verify his email first
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            template = loader.get_template('nepenthes/add_nepenthes.html')  # TODO POST needs a success/failure Message
+            inactive_user = send_verification_email(request, form)
 
+    return HttpResponse(template.render(context, request))
+
+def login(request):
+    context = {}
+    template = loader.get_template('nepenthes/register.html')
     return HttpResponse(template.render(context, request))
