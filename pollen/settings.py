@@ -32,12 +32,12 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # own settings
 
-LOGIN_URL = "accounts/login"
+LOGIN_URL = "login"
 
 AUTH_USER_MODEL = 'user.CustomUser'
 MEDIA_ROOT  = path.join(BASE_DIR, 'media')
