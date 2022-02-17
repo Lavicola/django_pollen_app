@@ -7,5 +7,5 @@ urlpatterns = [
     #path('nepenthes/<str:device_name>/', views.device_overview, name='device'),
     path("overview", views.nepenthes_overview_page),
     path("add", views.nepenthes_add_page),
-
+    path("register", views.register),
 ]
