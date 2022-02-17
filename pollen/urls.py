@@ -14,17 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.template.defaulttags import url
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from pollen_app.views import nepenthes_overview_page
-import pollen_app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/",include("api.urls")),
     path("nepenthes/", include("pollen_app.urls")),
-    path("login", pollen_app.views.login,name="login"),
+    path("accounts/", include("user.urls")),
     path('verification/', include('verify_email.urls')),
+
   ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

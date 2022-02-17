@@ -37,7 +37,7 @@ ALLOWED_HOSTS = []
 
 # own settings
 
-LOGIN_URL = "login"
+LOGIN_URL = "accounts/login"
 
 AUTH_USER_MODEL = 'user.CustomUser'
 MEDIA_ROOT  = path.join(BASE_DIR, 'media')
