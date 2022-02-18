@@ -38,7 +38,7 @@ ALLOWED_HOSTS = ["*"]
 # own settings
 
 LOGIN_URL = "login"
-
+APPEND_SLASH=False
 AUTH_USER_MODEL = 'user.CustomUser'
 MEDIA_ROOT  = path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
@@ -55,11 +55,14 @@ STATICFILES_DIRS = [
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = "smtp.strato.de"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = env("EMAIL_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
+
+DEFAULT_FROM_EMAIL = env("EMAIL_USER")
+SERVER_EMAIL = env("EMAIL_USER")
 
 #own settings end
 

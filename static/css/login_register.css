@@ -164,7 +164,7 @@
      opacity: 0
  }
 
- .wrapper .social-links li a:hover:before,
+
  .wrapper .btn.btn-primary:hover::before {
      opacity: 1;
      transform: skew(45deg) translateX(-130px)

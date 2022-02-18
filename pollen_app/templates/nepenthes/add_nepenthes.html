@@ -53,12 +53,21 @@
     <form action="" method="post" class="form-right" enctype="multipart/form-data">
         {% csrf_token %}
         <h2 class="text-uppercase">Add a new Nepenthes to your Account</h2>
-        <div class="row">
-            <div class="form-group">
-                <label for="id_nepenthes">Nepenthes Name</label>
-                <input name="nepenthes" id="id_nepenthes" class="form-control" type="text" placeholder="">
+
+        {% if message %}
+
+            <div class="row" style="text-align: center;">
+                <span style="border:2px solid {{ color }};"> {{ message|safe }}</span>
             </div>
+
+        {% endif %}
+
+
+        <div class="form-group">
+            <label for="id_name">Name</label>
+            <input name="name" id="id_name" class="form-control" type="text" placeholder="">
         </div>
+
         <div class="form-group mt-4">
             <label for="flower_status">Flower Status</label>
             <select name="flower_status" class="form-control" id="flower_status">
@@ -84,7 +93,7 @@
         <div class="form-group mt-2">
             <div class="mb-3">
                 <label for="file" class="form-label">Your Best Pitcher Image (max 500kb)</label>
-                <input type="file" class="form-control" id="image" name="image" accept="image/png,image/jpeg" />
+                <input type="file" class="form-control" id="image" name="image" accept="image/png,image/jpeg"/>
 
             </div>
         </div>

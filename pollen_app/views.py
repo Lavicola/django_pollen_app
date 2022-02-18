@@ -36,16 +36,38 @@ def nepenthes_add_page(request):
     context = {}
     template = loader.get_template('nepenthes/add_nepenthes.html')  # TODO POST needs a success/failure Message
 
-    if request.method == "POST" and request.user.is_authenticated:
-        # add plant to database if valid
-        form = addPlantForm(request.POST, request.FILES)
-        if form.is_valid():
-            name = form.cleaned_data['nepenthes']
-            flower_status = form.cleaned_data['flower_status']
-            sex = form.cleaned_data['sex']
-            image = form.cleaned_data['image']
-            nepenthes = Nepenthes(name=name, sex=sex, flower=flower_status, image=image, owner_id=request.user.id)
-            nepenthes.save()
+    if request.method == "POST":
+        message = ""
+        color = ""
+        if request.user.is_authenticated:
+            form = addPlantForm(request.POST, request.FILES)
+            if form.is_valid():
+                name = form.cleaned_data['name']
+                flower_status = form.cleaned_data['flower_status']
+                sex = form.cleaned_data['sex']
+                image = form.cleaned_data['image']
+                nepenthes = Nepenthes(name=name, sex=sex, flower=flower_status, image=image, owner_id=request.user.id)
+                nepenthes.save()
+                message += "Nepenthes {} was successfully saved!".format(nepenthes.name)
+                color += "green"
+            else:
+                for error_field in form.errors.keys():
+                    message+= "The field {} is required<br>".format(error_field)
+                color += "red"
+            context ={
+                "color": color,
+                "message": message,
+            }
+        else:
+            message += "Please Login or Register first"
+            color +="red"
+
+        context ={
+            "color": color,
+            "message": message,
+        }
+        return HttpResponse(template.render(context, request))
+
     if request.method == "GET":
         template = loader.get_template('nepenthes/add_nepenthes.html')
         return HttpResponse(template.render(context, request))

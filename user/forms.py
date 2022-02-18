@@ -13,15 +13,25 @@ class UserRegistrationForm(UserCreationForm):
         model = CustomUser
         fields = ('username', 'email', 'password1')
 
-    def clean_password1(self):
-        password1 = self.cleaned_data.get('password1')
-        try:
-            password_validation.validate_password(password1, self.instance)
-        except forms.ValidationError as error:
+    def clean(self, *args, **kwargs):
 
-            # Method inherited from BaseForm
-            self.add_error('password1', error)
-        return password1
+        cleaned_data = super(UserRegistrationForm,self).clean()
+        username = self.cleaned_data.get('username')
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password1')
+
+        if email and password:
+            user = CustomUser.objects.filter(email=email).first()
+            if user:
+                if not user.is_active:
+                     raise forms.ValidationError(
+                        'Email was not verified')
+
+
+
+
+
+
 
 
 class UserLoginForm(forms.Form):
@@ -36,7 +46,7 @@ class UserLoginForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if email and password:
-            user = authenticate(email=email, password=password)
+            user = CustomUser.objects.filter(email=email).first()
             if not user:
                 raise forms.ValidationError('This user does not exist')
             if not user.check_password(password):

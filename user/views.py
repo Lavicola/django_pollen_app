@@ -12,20 +12,31 @@ from user.forms import UserRegistrationForm,UserLoginForm
 def register(request):
     context = {}
     template = loader.get_template('accounts/register.html')
-    if (request.method == "GET"):
+    if request.method == "GET" and not request.user.is_authenticated:
         template = loader.get_template('accounts/register.html')
-    if (request.method == "POST"):
+    if request.method == "POST":
+        message = ""
+        color = ""
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             inactive_user = send_verification_email(request, form)
-
+            message += "You will shortly receive an Email please verify your Account"
+            color += "green"
+        else:
+            for error_field in form.errors.keys():
+                message += form.errors[error_field][0]+"<br>"
+            color+="red"
+        context = {
+            "color": color,
+            "message": message,
+        }
     return HttpResponse(template.render(context, request))
 
 def login(request):
     context = {}
-    if (request.method == "GET"):
-        template = loader.get_template('accounts/login.html')
-        return HttpResponse(template.render(context, request))
+    message = ""
+    color = "black"
+    template = loader.get_template('accounts/login.html')
 
     if(request.method == "POST"):
         form = UserLoginForm(request.POST)
@@ -33,8 +44,19 @@ def login(request):
             user = authenticate(email=form.cleaned_data["email"], password=form.cleaned_data["password"])
             auth_login(request,user)
             return redirect('/nepenthes/overview')
+        else:
+            for error_field in form.errors.keys():
+                message += form.errors[error_field][0]+"<br>"
+            color = "red"
 
-    return Response(status=405)
+        context = {
+            "message": message,
+            "color": color,
+        }
+
+
+    return HttpResponse(template.render(context, request))
+
 
 def logout(request):
     if (request.method == "GET"):
