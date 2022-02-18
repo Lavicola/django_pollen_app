@@ -89,7 +89,9 @@ def transaction_offer(request):
             FROM pollen_app_transaction
             JOIN user_customuser  on pollen_app_transaction.user_id = user_customuser.id
             JOIN pollen_app_nepenthes t1 on pollen_app_transaction.user_plant_id=t1.id
-            JOIN pollen_app_nepenthes t2 on pollen_app_transaction.author_plant_id=t2.id;""")
+            JOIN pollen_app_nepenthes t2 on pollen_app_transaction.author_plant_id=t2.id
+            WHERE pollen_app_transaction.author_id = {}
+            ;""".format(request.user.id)) #TODO maybe not safe?
 
         context ={
             "data": offers,
