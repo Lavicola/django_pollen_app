@@ -5,4 +5,6 @@ app_name = "pollen_app"
 urlpatterns = [
     path("overview", views.nepenthes_overview_page),
     path("add", views.nepenthes_add_page),
+    path("transaction_offers", views.transaction_offer),
+
 ]

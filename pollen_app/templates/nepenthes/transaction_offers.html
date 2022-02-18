@@ -1,0 +1,85 @@
+{% load static %}
+
+<!doctype html>
+<html>
+<head>
+    <title>My Transaction Offers</title>
+    <meta charset="UTF-8">
+
+    <!-- bootstrap libs -->
+    {% block bootstrap %}
+        {% include "bootstrap.html" %}
+    {% endblock %}
+    <!-- bootstrap libs end -->
+
+    <link href="{% static 'css/transaction_offers.css' %}" rel="stylesheet" type="text/css" media="all">
+    <!-- carousel slider -->
+
+
+</head>
+<body>
+
+
+<!-- Navbar -->
+{% block navbar %}
+    {% include "nav.html" %}
+{% endblock %}
+<!-- Navbar End -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+		<table class="table table-image table-bordered table-striped">
+		  <thead>
+		    <tr>
+              <th scope="col">Your Plant</th>
+		      <th scope="col">Offered Plant</th>
+		      <th scope="col">Image</th>
+		      <th scope="col">User</th>
+		      <th scope="col">Status</th>
+		      <th scope="col">Action</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+          {% for nepenthes in data %}
+
+		    <tr>
+              <th scope="row">{{ nepenthes.AUTHOR_PLANT_NAME }}</th>
+
+		      <th scope="row">{{ nepenthes.USER_PLANT_NAME }}</th>
+		      <td class="w-25">
+			      <img src="/media/{{ nepenthes.image }}" class="img-fluid img-thumbnail" alt="Sheep">
+		      </td>
+		      <td>{{ nepenthes.username }}</td>
+
+
+                {% if not nepenthes.acccepted %}
+
+                  <td>Pending</td>
+                {% elif nepenthes.acccepted == 1 %}
+                    Acccepted
+                {% else %}
+                    Denied
+                {% endif %}
+
+
+		      <td style="width: 50px" class="align-middle">
+                  <div class="btn-group">
+        <button type="button" class="btn btn-success">Accept</button>
+        <button type="button" class="btn btn-danger">Deny</button>
+
+                  </div>
+
+
+              </td>
+		    </tr>
+{% endfor %}
+
+
+		  </tbody>
+		</table>
+    </div>
+  </div>
+</div>
+</body>
+</html>

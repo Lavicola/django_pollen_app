@@ -1,10 +1,12 @@
 from django.http import Http404, HttpResponse
 from django.template import loader
-from pollen_app.models import Nepenthes
+from pollen_app.models import Nepenthes, Transaction
 from pollen_app.forms import addPlantForm
 
 
 # Create your views here.
+from user.models import CustomUser
+
 
 def nepenthes_detail_page(request, nepenthes_name):
     try:
@@ -75,3 +77,26 @@ def nepenthes_add_page(request):
         return HttpResponse(template.render(context, request))
     template = loader.get_template('nepenthes/add_nepenthes.html')
     return HttpResponse(template.render(context, request))
+
+
+
+def transaction_offer(request):
+    context = {}
+    template = loader.get_template('nepenthes/transaction_offers.html')
+    if request.user.is_authenticated:
+        offers = Transaction.objects.raw("""
+            SELECT pollen_app_transaction.id,username,t1.name as USER_PLANT_NAME,t1.image,t2.name as AUTHOR_PLANT_NAME,user_plant_id,accepted
+            FROM pollen_app_transaction
+            JOIN user_customuser  on pollen_app_transaction.user_id = user_customuser.id
+            JOIN pollen_app_nepenthes t1 on pollen_app_transaction.user_plant_id=t1.id
+            JOIN pollen_app_nepenthes t2 on pollen_app_transaction.author_plant_id=t2.id;""")
+
+        context ={
+            "data": offers,
+        }
+
+    return HttpResponse(template.render(context, request))
+
+
+
+
