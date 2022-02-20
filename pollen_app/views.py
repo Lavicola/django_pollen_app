@@ -3,7 +3,6 @@ from django.template import loader
 from pollen_app.models import Nepenthes, Transaction
 from pollen_app.forms import addPlantForm
 
-
 # Create your views here.
 from user.models import CustomUser
 
@@ -12,7 +11,7 @@ def nepenthes_detail_page(request, nepenthes_name):
     try:
         nepenthes = Nepenthes.objects.get(name=nepenthes_name)
     except Nepenthes.DoesNotExist:
-        raise Http404("Nepentthes does not exist")
+        raise Http404("Nepenthes does not exist")
     context = {
         "nepenthes": nepenthes,
     }
@@ -54,17 +53,13 @@ def nepenthes_add_page(request):
                 color += "green"
             else:
                 for error_field in form.errors.keys():
-                    message+= "The field {} is required<br>".format(error_field)
+                    message += "The field {} is required<br>".format(error_field)
                 color += "red"
-            context ={
-                "color": color,
-                "message": message,
-            }
         else:
             message += "Please Login or Register first"
-            color +="red"
+            color += "red"
 
-        context ={
+        context = {
             "color": color,
             "message": message,
         }
@@ -75,9 +70,6 @@ def nepenthes_add_page(request):
         return HttpResponse(template.render(context, request))
 
         return HttpResponse(template.render(context, request))
-    template = loader.get_template('nepenthes/add_nepenthes.html')
-    return HttpResponse(template.render(context, request))
-
 
 
 def transaction_offer(request):
@@ -85,20 +77,38 @@ def transaction_offer(request):
     template = loader.get_template('nepenthes/transaction_offers.html')
     if request.user.is_authenticated:
         offers = Transaction.objects.raw("""
-            SELECT pollen_app_transaction.id,username,t1.name as USER_PLANT_NAME,t1.image,t2.name as AUTHOR_PLANT_NAME,user_plant_id,accepted
+            SELECT pollen_app_transaction.id,username,t1.name as USER_PLANT_NAME,t1.image,t2.name as AUTHOR_PLANT_NAME,user_plant_id as UPLANTID,author_plant_id as APLANTID,accepted
             FROM pollen_app_transaction
             JOIN user_customuser  on pollen_app_transaction.user_id = user_customuser.id
             JOIN pollen_app_nepenthes t1 on pollen_app_transaction.user_plant_id=t1.id
             JOIN pollen_app_nepenthes t2 on pollen_app_transaction.author_plant_id=t2.id
             WHERE pollen_app_transaction.author_id = {}
-            ;""".format(request.user.id)) #TODO maybe not safe?
+            ORDER BY created DESC
+            ;""".format(request.user.id))  # TODO maybe not safe?
 
-        context ={
+        context = {
             "data": offers,
         }
 
     return HttpResponse(template.render(context, request))
 
 
+def transaction_requests(request):
+    context = {}
+    template = loader.get_template('nepenthes/transaction_requests.html')
+    if request.user.is_authenticated:
+        offers = Transaction.objects.raw("""
+            SELECT pollen_app_transaction.id,username,t1.name as USER_PLANT_NAME,t2.image,t2.name as AUTHOR_PLANT_NAME,email,accepted
+            FROM pollen_app_transaction
+            JOIN user_customuser  on pollen_app_transaction.author_id = user_customuser.id
+            JOIN pollen_app_nepenthes t1 on pollen_app_transaction.user_plant_id=t1.id
+            JOIN pollen_app_nepenthes t2 on pollen_app_transaction.author_plant_id=t2.id
+            WHERE pollen_app_transaction.user_id = {}
+            ORDER BY created DESC
+            ;""".format(request.user.id))  # TODO maybe not safe?
 
+        context = {
+            "data": offers,
+        }
 
+    return HttpResponse(template.render(context, request))

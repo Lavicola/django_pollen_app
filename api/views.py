@@ -86,3 +86,34 @@ class TransactionView(APIView):
             return Response(status=201)
 
         return Response(status=500)
+
+    def put(self, request):
+        if request.user.is_authenticated:
+            transactionId = request.POST.get("transactionId");
+            accepted = request.POST.get("accepted");
+            if accepted ==  "true":
+                accepted = True
+            elif accepted == "false":
+                accepted = False
+            else:
+                return Response(status=409)
+            try:
+                Transaction.objects.filter(id=transactionId,accepted__isnull=True).update(accepted=accepted)
+            except IntegrityError as e:
+                return Response(status=409)
+
+
+
+
+
+        return Response(status=201)
+
+
+
+
+
+
+
+
+
+

@@ -117,6 +117,7 @@ class Transaction(models.Model):
     author_plant = models.ForeignKey(Nepenthes,null=False,on_delete=models.CASCADE)
     user_plant = models.ForeignKey(Nepenthes,null=False,on_delete=models.CASCADE,related_name = "user_plant")
     accepted = models.BooleanField(null=True) # does the author accept?
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=["author","user","author_plant","user_plant"],name="unique_transaction")]

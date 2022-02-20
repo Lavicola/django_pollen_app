@@ -37,46 +37,45 @@
                 <thead>
                 <tr>
                     <th scope="col">Your Plant</th>
-                    <th scope="col">Offered Plant</th>
+                    <th scope="col">Requested Plant</th>
                     <th scope="col">Image</th>
                     <th scope="col">User</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for nepenthes in data %}
                 <tr>
-                    <th scope="row">{{ nepenthes.AUTHOR_PLANT_NAME }}</th>
-
                     <th scope="row">{{ nepenthes.USER_PLANT_NAME }}</th>
+
+                    <th scope="row">{{ nepenthes.AUTHOR_PLANT_NAME }}</th>
                     <td class="w-25">
                         <img src="/media/{{ nepenthes.image }}" class="img-fluid img-thumbnail">
                     </td>
-                    <td>{{ nepenthes.username }}</td>
+                    <td>{{ nepenthes.username }}
+                        {% if nepenthes.accepted %}
+                        <br>
+                        <a href=
+                                   "mailto:{{nepenthes.email}}?subject=Trade Offer
+                      &body=Greetings,
+                      %0D%0A%0D%0A
+                      I am writing to your because of my offer:
+                      %0D%0A%0D%0A
+                      My {{nepenthes.USER_PLANT_NAME}} with your {{nepenthes.AUTHOR_PLANT_NAME}}
+                    ">Send Email</a>
+                        {% endif %}
 
-                    <td> <span id="{{nepenthes.id}}">
-                    {% if nepenthes.accepted %}
-                    Accepted
-                    {% elif nepenthes.accepted == False %}
-                    Denied
-                    {% else %}
-                    Pending
-                    {% endif %}
-                    </span></td>
+                    </td>
 
-                    <td style="width: 50px" class="align-middle">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-success"
-                                    onclick="updateTransaction('{{nepenthes.id}}',true);">
-                                Accept
-                            </button>
-                            <button type="button" class="btn btn-danger"
-                                    onclick="updateTransaction('{{nepenthes.id}}',false);">
-                                Deny
-                            </button>
-
-                        </div>
+                    <td>
+                        {% if nepenthes.accepted %}
+                        Accepted
+                        {% elif nepenthes.accepted == False %}
+                        Denied
+                        {% else %}
+                        Pending
+                        {% endif %}
+                    </td>
 
 
                     </td>
@@ -95,25 +94,24 @@
 
     //not a good solution, should be implemented in vue one day
 
-    function changeStatus(id,accepted){
+    function changeStatus(id, accepted) {
 
-        element = document.getElementById(""+id);
-        if(element.innerText != "Pending"){
+        element = document.getElementById("" + id);
+        if (element.innerText != "Pending") {
             return;
         }
-        if(accepted){
+        if (accepted) {
             element.innerText = "Accepted";
-        }else{
+        } else {
             element.innerText = "Denied";
         }
     }
 
 
-    function updateTransaction(transactionId,isAccepted) {
+    function updateTransaction(transactionId, isAccepted) {
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.withCredentials = true;
-
 
 
         //https://www.section.io/engineering-education/ajax-request-in-django-using-axios/
@@ -126,7 +124,7 @@
         axios.put("/api/transaction", data)
             .then(res => {
                     if (res.status == 201) {
-                        changeStatus(transactionId,isAccepted);
+                        changeStatus(transactionId, isAccepted);
                         console.log("nice")
                     } else {
                         alert("something went wrong");

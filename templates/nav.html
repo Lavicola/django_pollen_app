@@ -6,7 +6,8 @@
                 <div class="navbar-nav me-auto">
                     <a class="nav-link" aria-current="page" href="/nepenthes/add">add Plant</a>
                 <a class="nav-link" aria-current="page" href="/nepenthes/overview">Look for Mates</a>
-                <a class="nav-link" aria-current="page" href="">My Plants</a>
+
+
 
     {% if not user.is_authenticated  %}
                 <a class="nav-link" aria-current="page" href="/accounts/register">Register</a>
@@ -14,9 +15,13 @@
 
     {% endif %}
     {% if user.is_authenticated  %}
-                <a class="nav-link" aria-current="page" href="/accounts/logout">Logout</a>
-                <a class="nav-link" aria-current="page" href="/nepenthes/transaction_offers">My Offers</a> </div>
 
+                <a class="nav-link" aria-current="page" href="/accounts/logout">Logout</a>
+
+                <a class="nav-link" aria-current="page" href="/nepenthes/transaction_offers">My Offers</a>
+                <a class="nav-link" aria-current="page" href="/nepenthes/transaction_requests">My Requests</a>
+
+            </div>
     {% endif %}
             </div>
         </div>
