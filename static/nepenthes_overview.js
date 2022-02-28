@@ -15,6 +15,9 @@ new Vue({
     delimiters: ['{[', ']}'],
     data: {
         csrfTokenName: "csrftoken",
+        page: 1,
+        perPage: 10,
+        pages: [],
         all_nepenthes: [],
         nepenthes: [],
         widht_limit: 575, // if it is equal smaller we use mobile filter
@@ -60,10 +63,14 @@ new Vue({
             let female = document.getElementById(flag + "female").checked;
             let blooming = document.getElementById(flag + "blooming").checked;
             let soon_blooming = document.getElementById(flag + "soon_blooming").checked;
+            let usa = document.getElementById(flag + "usa").checked;
+            let eu = document.getElementById(flag + "eu").checked;
+
 
             let gender;
             let flower_status;
             let spec;
+            let shipping;
 
             if (species == false && hybrid == true) {
                 spec = true;
@@ -84,20 +91,27 @@ new Vue({
             if (blooming == false && soon_blooming == true) {
                 flower_status = FLOWER_STATUS.soon_flowering;
             } else if (blooming == true && soon_blooming == false) {
-                console.log("BLOOOOOM");
                 flower_status = FLOWER_STATUS.flowering;
             } else {
-
                 flower_status = DONT_CARE; // we don´t care
             }
 
-            console.log(flower_status);
+            if (eu == false && usa == true) {
+                shipping = SHIPPING.usa;
+            } else if (eu == true && usa == false) {
+                shipping = SHIPPING.eu;
+            } else {
+                shipping = DONT_CARE; // we don´t care
+            }
+
+
             let search_results = [];
             for (const element of this.all_nepenthes) {
                 let condition = {
                     condition1: false,
                     condition2: false,
                     condition3: false,
+                    condition4: false,
                 }
 
 
@@ -111,16 +125,15 @@ new Vue({
 
 
                 if (element["flower"] == flower_status || flower_status == DONT_CARE) {
-                    console.log(flower_status);
-                    console.log(element["flower"]);
-                    console.log("------------------");
-
                     condition.condition3 = true;
                 }
 
+                if (element["shipping"] == shipping || shipping == DONT_CARE) {
+                    condition.condition4 = true;
+                }
 
-                if (condition.condition1 && condition.condition2 && condition.condition3) {
-                    console.log("TRUE");
+
+                if (condition.condition1 && condition.condition2 && condition.condition3 && condition.condition4) {
                     search_results.push(element);
                 }
 
@@ -161,6 +174,12 @@ const FLOWER_STATUS = {
     no_flower: 0,
     soon_flowering: 1,
     flowering: 2,
+};
+
+const SHIPPING = {
+    usa: 0,
+    eu: 1,
+    international: 2,
 };
 
 

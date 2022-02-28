@@ -23,24 +23,40 @@ class SEX(models.TextChoices):
     UNKOWN = "2", "unkown"
 
 
+class SHIPPING(models.TextChoices):
+    USA = "0", "usa ",
+    EU = "1", "eu",
+    INTERNATIONAL = "2", "international"
+
+
+
 class Nepenthes(models.Model):
     id = models.AutoField(primary_key=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=False)
-    sex = models.CharField(
-        max_length=2,
-        choices=SEX.choices,
-        default=SEX.UNKOWN
-    )
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=100)
+    description = models.CharField(
+        blank=True,
+        max_length=400)  # maybe someone wants to point out something interesting about his plant e.g color and so on
+
+
     flower = models.CharField(
         max_length=2,
         choices=FLOWER.choices,
         default=FLOWER.NO_FLOWER
     )
+    sex = models.CharField(
+        max_length=2,
+        choices=SEX.choices,
+        default=SEX.UNKOWN
+    )
+    shipping = models.CharField(
+        max_length=2,
+        choices=SHIPPING.choices,
+        default=SHIPPING.INTERNATIONAL
+    )
+
     isHybrid = models.BooleanField(default=False)
     image = models.FileField(upload_to='images')
-    description = models.CharField(
-        max_length=200)  # maybe someone wants to point out something interesting about his plant e.g color and so on
 
     def getUsername(self):
         return CustomUser.objects.filter(id=self.owner_id).first()

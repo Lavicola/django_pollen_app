@@ -64,6 +64,14 @@ EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
 DEFAULT_FROM_EMAIL = env("EMAIL_USER")
 SERVER_EMAIL = env("EMAIL_USER")
 
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
+
 #own settings end
 
 
@@ -75,6 +83,7 @@ INSTALLED_APPS = [
     'pollen_app.apps.PollenAppConfig',
     'api.apps.ApiConfig',
     # own packages end
+    "debug_toolbar",
     "verify_email.apps.VerifyEmailConfig",
     'rest_framework',
     'django.contrib.admin',
@@ -91,6 +100,8 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

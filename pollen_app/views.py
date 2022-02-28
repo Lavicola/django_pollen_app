@@ -43,11 +43,8 @@ def nepenthes_add_page(request):
         if request.user.is_authenticated:
             form = addPlantForm(request.POST, request.FILES)
             if form.is_valid():
-                name = form.cleaned_data['name']
-                flower_status = form.cleaned_data['flower_status']
-                sex = form.cleaned_data['sex']
-                image = form.cleaned_data['image']
-                nepenthes = Nepenthes(name=name, sex=sex, flower=flower_status, image=image, owner_id=request.user.id)
+                nepenthes = form.save(commit=False)
+                nepenthes.owner = request.user
                 nepenthes.save()
                 message += "Nepenthes {} was successfully saved!".format(nepenthes.name)
                 color += "green"

@@ -17,7 +17,7 @@ class NepenthesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Nepenthes
-        fields = ('id', 'name', 'flower', "username", "sex", "isHybrid", 'image', 'description')
+        fields = ('id', 'name', 'flower', "username", "sex", "isHybrid", 'image', 'description',"shipping")
 
 
 class FeedbackSerializer(serializers.ModelSerializer):

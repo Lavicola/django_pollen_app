@@ -1,9 +1,11 @@
-from django import forms
-from pollen_app.models import FLOWER, SEX
+from django.forms import ModelForm
+from pollen_app.models import Nepenthes
 
 
-class addPlantForm(forms.Form):
-    name = forms.CharField(max_length=500, required=True)
-    flower_status = forms.ChoiceField(choices=FLOWER.choices, widget=forms.RadioSelect, required=True)
-    sex = forms.ChoiceField(choices=SEX.choices, widget=forms.RadioSelect, required=True)
-    image = forms.ImageField(required=True)
+class addPlantForm(ModelForm):
+    class Meta:
+        model = Nepenthes
+        fields = ['name', 'description', 'flower', 'sex',"shipping","image"]
+
+
+

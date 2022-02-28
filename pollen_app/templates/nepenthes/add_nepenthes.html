@@ -8,7 +8,7 @@
 
     <!-- bootstrap libs -->
     {% block bootstrap %}
-        {% include "bootstrap.html" %}
+    {% include "bootstrap.html" %}
     {% endblock %}
     <!-- bootstrap libs end -->
     <link href="{% static 'css/add_nepenthes.css' %}" rel="stylesheet" type="text/css" media="all">
@@ -19,46 +19,25 @@
 <body>
 <!-- Navbar -->
 {% block navbar %}
-    {% include "nav.html" %}
+{% include "nav.html" %}
 {% endblock %}
 <!-- Navbar End -->
 
 
 <!-- form+css taken form: https://bbbootstrap.com/snippets/bootstrap-5-user-registration-form-82669371-->
 <div class="wrapper">
-    <div class="form-left">
-        <h2 class="text-uppercase">Currently Registered plants</h2>
-
-        <table class="table table-dark">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Sex</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td style="word-wrap: break-word;min-width: 160px;max-width: 160px;">Nepenthes spectabilis x ventricosa
-                    x hamata x rajah x rokko x lowii x truncata
-                </td>
-                <td>Male</td>
-            </tr>
-            </tbody>
-        </table>
+    <!--<div class="form-left"></div>  -->
 
 
-    </div>
     <form action="" method="post" class="form-right" enctype="multipart/form-data">
         {% csrf_token %}
         <h2 class="text-uppercase">Add a new Nepenthes to your Account</h2>
 
         {% if message %}
 
-            <div class="row" style="text-align: center;">
-                <span style="border:2px solid {{ color }};"> {{ message|safe }}</span>
-            </div>
+        <div class="row" style="text-align: center;">
+            <span style="border:2px solid {{ color }};"> {{ message|safe }}</span>
+        </div>
 
         {% endif %}
 
@@ -67,10 +46,13 @@
             <label for="id_name">Name</label>
             <input name="name" id="id_name" class="form-control" type="text" placeholder="">
         </div>
-
+        <div class="form-group">
+    <label for="id_description">Description</label>
+    <textarea class="form-control" id="id_description" rows="3"></textarea>
+        </div>
         <div class="form-group mt-4">
-            <label for="flower_status">Flower Status</label>
-            <select name="flower_status" class="form-control" id="flower_status">
+            <label for="flower">Flower Status</label>
+            <select name="flower" class="form-control" id="flower">
                 <option value="0">Currently not Flowering</option>
                 <option value="1">developing a flower</option>
                 <option value="2">blooming</option>
@@ -89,6 +71,21 @@
                 <input checked class="form-check-input" type="radio" name="sex" id="inlineRadio3" value="2">
                 <label class="form-check-label" for="inlineRadio3">Unkown</label>
             </div>
+        </div>
+        <div class="form-group mt-4">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="shipping" id="inlineRadio5" value="0">
+                <label class="form-check-label" for="inlineRadio5">USA</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="shipping" id="inlineRadio6" value="1">
+                <label class="form-check-label" for="inlineRadio6">EU</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input checked class="form-check-input" type="radio" name="shipping" id="inlineRadio4" value="2">
+                <label class="form-check-label" for="inlineRadio4">International</label>
+            </div>
+
         </div>
         <div class="form-group mt-2">
             <div class="mb-3">

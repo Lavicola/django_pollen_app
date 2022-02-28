@@ -8,7 +8,7 @@
 
     <!-- bootstrap libs -->
     {% block bootstrap %}
-        {% include "bootstrap.html" %}
+    {% include "bootstrap.html" %}
     {% endblock %}
     <!-- bootstrap libs end -->
 
@@ -24,7 +24,7 @@
 
 <!-- Navbar -->
 {% block navbar %}
-    {% include "nav.html" %}
+{% include "nav.html" %}
 {% endblock %}
 <!-- Navbar End -->
 
@@ -55,6 +55,7 @@
         <h4 id="burgundy">Filters</h4>
     </div>
     <form>
+
         <div class="form-group"><input type="checkbox" id="species"> <label for="species">Species</label></div>
         <div class="form-group"><input type="checkbox" id="hybrid"> <label for="hybrid">Hybrids</label></div>
         <div class="form-group"><input type="checkbox" id="male"> <label for="male">Male</label></div>
@@ -62,7 +63,7 @@
         <div class="form-group"><input type="checkbox" id="blooming"> <label for="blooming">blooming</label></div>
         <div class="form-group"><input type="checkbox" id="soon_blooming"> <label for="soon_blooming">soon
             blooming</label>
-            <div class="form-group"><input type="checkbox" id="us"> <label for="us">USA</label></div>
+            <div class="form-group"><input type="checkbox" id="usa"> <label for="usa">USA</label></div>
             <div class="form-group"><input type="checkbox" id="eu"> <label for="eu">EU</label>
             </div>
 
@@ -78,9 +79,9 @@
                 <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
                        aria-describedby="search-addon"/>
 
-                <button id="search-addon" v-on:click.prevent="getSearchResults">
+                <button v-on:click.prevent="getSearchResults">
                     <span class="fa fa-search text-muted" class="input-group-text border-0"
-                          id="search-addon"></span></span>
+                    ></span></span>
                 </button>
 
             </div>
@@ -103,27 +104,22 @@
                         </div>
                         <div class="d-flex flex-row my-2">
                             <div v-if="nep.flower == 0 ">Flower: No Flower</div>
-                            <div v-else-if="nep.flower == 1 ">Flower: Developing Flower</div>
+                            <div v-else-if="nep.flower == 1 ">Flower: Developing</div>
                             <div v-else="nep.flower == 2 ">Flower: Blooming</div>
                         </div>
-                        <div class="input-group mb-3">
-                            <select class="form-control-sm" :id="'dropdown_'+nep.id">
+                        <div class="input-group">
+                            <select class="form-control" :id="'dropdown_'+nep.id">
+                                <option>Select Plant</option>
                                 {% for neps in user_nepenthes %}
-                                    <option value="{{ neps.id }}"
-                                            v-if="nep.sex != {{ neps.sex }} ">{{ neps.name }}</option>
+                                <option value="{{ neps.id }}"
+                                        v-if="nep.sex != {{ neps.sex }} ">{{ neps.name }}
+                                </option>
                                 {% endfor %}
                             </select>
-                            <button class="btn btn-outline-secondary "
-                                    v-on:click.prevent="sendOffer(nep.id,nep.username['username'])" type="button">Send Email
-
-                            </button>
-
-
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
+                            <span class="input-group-btn">
+    <button class="btn btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-remove"
+                                                                      aria-hidden="true"></span>Send</button>
+  </span>
                         </div>
 
 
@@ -134,6 +130,7 @@
 
         </div>
     </div>
+
 </section>
 
 
