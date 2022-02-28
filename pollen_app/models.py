@@ -75,7 +75,7 @@ class Nepenthes(models.Model):
         im = Image.open(self.image)
         output = BytesIO()
 
-        size = 1024, 256
+        size = 1280, 720
         im.thumbnail(size, Image.ANTIALIAS)
         im.save(output, format=fileending)
         output.seek(0)

@@ -66,7 +66,7 @@
             <div class="form-group"><input type="checkbox" id="usa"> <label for="usa">USA</label></div>
             <div class="form-group"><input type="checkbox" id="eu"> <label for="eu">EU</label>
             </div>
-
+        </div>
     </form>
     </div>
 </section>
@@ -87,26 +87,36 @@
             </div>
         </div>
 
-
         <div class="row">
-            <div class="col-sm" v-for="nep in nepenthes">
-                <div class="card">
-                    <img class="card-img-top" :src="nep.image">
-                    <div class="card-body">
-                        <h5><b>{[ nep.name]}</b></h5>
-                        <div class="d-flex flex-row my-2">
-                            <div class="p-0">Author: {[nep.username["username"]]}</div>
-                        </div>
-                        <div class="d-flex flex-row my-2">
-                            <div v-if="nep.sex == 0 ">Sex: Male</div>
-                            <div v-else-if="nep.sex == 1 ">Sex: Female</div>
-                            <div v-else="nep.sex == 2 ">Sex: Unkown</div>
-                        </div>
-                        <div class="d-flex flex-row my-2">
-                            <div v-if="nep.flower == 0 ">Flower: No Flower</div>
-                            <div v-else-if="nep.flower == 1 ">Flower: Developing</div>
-                            <div v-else="nep.flower == 2 ">Flower: Blooming</div>
-                        </div>
+            <div class="col-lg-4 mb-3 align-items-stretch" v-for="nep in nepenthes">
+                <div class="card h-100" style="width: 18rem;">
+                    <div class="ratio ratio-1x1">
+                        <img :src="nep.image" class="card-img-top" alt="Card Image">
+                    </div>
+                    <div class="card-header d-flex align-items-center justify-content-center">
+                        <h4 class="my-0 font-weight-normal">{[nep.name]}</h4>
+                    </div>
+
+                    <div class="card-body flex-column h-100">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                Author:{[nep.username["username"]]}
+
+                            </li>
+                            <li class="list-group-item">Sex:
+                                <template v-if="nep.sex == 0 ">Male</template>
+                                <template v-else-if="nep.sex == 1 ">Female</template>
+                                <template v-else="nep.sex == 2 ">Unkown</template>
+                            </li>
+                            <li class="list-group-item">Flower:
+                                <template v-if="nep.flower == 0 ">No Flower</template>
+                                <template v-else-if="nep.flower == 1 ">Developing</template>
+                                <template v-else="nep.flower == 2 "> Blooming</template>
+
+                            </li>
+                        </ul>
+
+
                         <div class="input-group">
                             <select class="form-control" :id="'dropdown_'+nep.id">
                                 <option>Select Plant</option>
@@ -121,9 +131,9 @@
                                                                       aria-hidden="true"></span>Send</button>
   </span>
                         </div>
-
-
                     </div>
+
+
                 </div>
             </div>
 
