@@ -132,7 +132,7 @@
                                 {% endfor %}
                             </select>
                             <span class="input-group-btn">
-    <button class="btn btn-default drop_button" type="button" tabindex="-1"><span class="glyphicon glyphicon-remove"
+    <button  v-on:click.prevent="sendOffer(nep.id,nep.username['username'])" class="btn btn-default drop_button" type="button" tabindex="-1"><span class="glyphicon glyphicon-remove"
                                                                                   aria-hidden="true"></span>Send</button>
   </span>
                         </div>
