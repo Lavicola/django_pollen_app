@@ -15,12 +15,13 @@ new Vue({
     delimiters: ['{[', ']}'],
     data: {
         csrfTokenName: "csrftoken",
-        page: 1,
+        current_page: 0,
         perPage: 10,
         pages: [],
         all_nepenthes: [],
         nepenthes: [],
-        widht_limit: 575, // if it is equal smaller we use mobile filter
+        filtert_nepenthes: [],
+        widht_limit: 767, // if it is equal smaller we use mobile filter
     },
     mounted: function () {
         this.getNepenthes();
@@ -34,8 +35,6 @@ new Vue({
         },
         getUserNepenthes: function (id) {
             return document.getElementById("dropdown_" + id).value;
-
-
         },
         getNepenthes: function () {
             let flag = ""
@@ -43,9 +42,32 @@ new Vue({
             axios.get(api_base_url)
                 .then((response) => {
                     this.all_nepenthes = response.data;
-                    this.nepenthes = this.all_nepenthes;
+                    this.filtert_nepenthes = this.all_nepenthes;
+                    this.pages = Math.trunc(this.all_nepenthes.length / this.perPage)+1;
+                    this.updatePage(1);
+
                 })
         },
+        updatePage: function (counter) {
+            items = [];
+            if(counter){
+                this.current_page += counter;
+            }
+
+            console.log(this.current_page);
+            console.log(this.pages);
+
+            for(let i=(this.current_page*this.perPage)-this.perPage; (i < this.current_page*this.perPage) && (i < this.filtert_nepenthes.length)  ;i++ ){
+                items.push(this.filtert_nepenthes[i]);
+            }
+            this.nepenthes = items;
+        },
+        gotoPage: function () {
+                let page  = document.getElementById("gotoPage").value;
+                this.current_page = parseInt(page);
+                this.updatePage(false);
+
+                },
         getSearchResults: function () {
             let flag = ""
             let width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
@@ -139,8 +161,9 @@ new Vue({
 
             }
 
-            this.nepenthes = search_results;
+            this.filtert_nepenthes = search_results;
 
+            this.updatePage(false);
 
         }, sendOffer: function (id, username) {
             let csrf_token = this.getToken(this.csrfTokenName);

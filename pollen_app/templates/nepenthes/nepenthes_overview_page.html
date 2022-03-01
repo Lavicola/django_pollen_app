@@ -19,6 +19,7 @@
 
 </head>
 <body>
+<a name="top"></a>
 
 <input type="hidden" id="csrf" value={{ csrf_token }}/>
 
@@ -29,33 +30,12 @@
 <!-- Navbar End -->
 
 </div>
-<div id="mobile-filter">
-    <p class="pl-sm-0 pl-2"> Home | <b>Nepenthes List</b></p>
-    <div class="border-bottom pb-2 ml-2">
-        <h4 id="burgundy">Filters</h4>
-    </div>
-
-    <div class="py-2 border-bottom ml-3">
-        <h6 class="font-weight-bold">Filters</h6>
-        <div id="orange"><span class="fa fa-minus"></span></div>
-        <form>
-            <div class="form-group"><input type="checkbox" id="m_species"> <label for="artisan">Species</label></div>
-            <div class="form-group"><input type="checkbox" id="m_hybrids"> <label for="breakfast">Hybrids</label></div>
-            <div class="form-group"><input type="checkbox" id="m_male"> <label for="healthy">Male</label></div>
-            <div class="form-group"><input type="checkbox" id="m_female"> <label for="healthy">Female</label></div>
-            <div class="form-group"><input type="checkbox" id="m_blooming"> <label for="healthy">blooming</label></div>
-            <div class="form-group"><input type="checkbox" id="m_soon_blooming"> <label for="healthy">soon
-                blooming</label></div>
-        </form>
-    </div>
-</div>
 <!-- Sidebar filter section -->
 <section id="sidebar">
     <div class="border-bottom pb-2 ml-2">
         <h4 id="burgundy">Filters</h4>
     </div>
     <form>
-
         <div class="form-group"><input type="checkbox" id="species"> <label for="species">Species</label></div>
         <div class="form-group"><input type="checkbox" id="hybrid"> <label for="hybrid">Hybrids</label></div>
         <div class="form-group"><input type="checkbox" id="male"> <label for="male">Male</label></div>
@@ -70,26 +50,51 @@
     </form>
     </div>
 </section>
-<!-- products section -->
-<section id="nepenthes_search">
-    <div class="container">
-        <div class="d-flex">
-            <div class="input-group rounded">
 
-                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
-                       aria-describedby="search-addon"/>
-
-                <button v-on:click.prevent="getSearchResults">
-                    <span class="fa fa-search text-muted" class="input-group-text border-0"
-                    ></span></span>
-                </button>
-
+<div id="mobile-filter">
+    <div class="py-2 border-bottom ml-3">
+        <h6 class="font-weight-bold">Filters</h6>
+        <div id="orange"><span class="fa fa-minus"></span></div>
+</div>
+<div style="color:white;">
+            <div class="form-group"><input type="checkbox" id="m_species"> <label for="m_species">Species</label></div>
+        <div class="form-group"><input type="checkbox" id="m_hybrid"> <label for="m_hybrid">Hybrids</label></div>
+        <div class="form-group"><input type="checkbox" id="m_male"> <label for="m_male">Male</label></div>
+        <div class="form-group"><input type="checkbox" id="m_female"> <label for="m_female">Female</label></div>
+        <div class="form-group"><input type="checkbox" id="m_blooming"> <label for="m_blooming">blooming</label></div>
+        <div class="form-group"><input type="checkbox" id="m_soon_blooming"> <label for="m_soon_blooming">soon
+            blooming</label>
+            <div class="form-group"><input type="checkbox" id="m_usa"> <label for="m_usa">USA</label></div>
+            <div class="form-group"><input type="checkbox" id="m_eu"> <label for="m_eu">EU</label>
             </div>
         </div>
+</div>
+
+</div>
+</div>
+
+
+<!-- products section -->
+<section id="nepenthes_search">
+    <div class="d-flex">
+        <div class="input-group rounded" style="margin-bottom: 10px;">
+
+            <input id="search" type="search" class="form-control rounded custom_element" placeholder="Search"
+                   aria-label="Search"
+                   aria-describedby="search-addon"/>
+
+            <button v-on:click.prevent="getSearchResults">
+                    <span class="fa fa-search text-muted custom_element input-group-text border-0"
+                    ></span></span>
+            </button>
+
+        </div>
+    </div>
+    <div class="container">
 
         <div class="row">
-            <div class="col-lg-4 mb-3 align-items-stretch" v-for="nep in nepenthes">
-                <div class="card h-100" style="width: 18rem;">
+            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-6" v-for="nep in nepenthes">
+                <div class="card h-100">
                     <div class="ratio ratio-1x1">
                         <img :src="nep.image" class="card-img-top" alt="Card Image">
                     </div>
@@ -100,8 +105,7 @@
                     <div class="card-body flex-column h-100">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
-                                Author:{[nep.username["username"]]}
-
+                                Author: {[nep.username["username"]]}
                             </li>
                             <li class="list-group-item">Sex:
                                 <template v-if="nep.sex == 0 ">Male</template>
@@ -118,7 +122,8 @@
 
 
                         <div class="input-group">
-                            <select class="form-control" :id="'dropdown_'+nep.id">
+                            <select class="form-control custom_element" :id="'dropdown_'+nep.id"
+                                    style="font-size: xx-large">
                                 <option>Select Plant</option>
                                 {% for neps in user_nepenthes %}
                                 <option value="{{ neps.id }}"
@@ -127,8 +132,8 @@
                                 {% endfor %}
                             </select>
                             <span class="input-group-btn">
-    <button class="btn btn-default" type="button" tabindex="-1"><span class="glyphicon glyphicon-remove"
-                                                                      aria-hidden="true"></span>Send</button>
+    <button class="btn btn-default drop_button" type="button" tabindex="-1"><span class="glyphicon glyphicon-remove"
+                                                                                  aria-hidden="true"></span>Send</button>
   </span>
                         </div>
                     </div>
@@ -141,6 +146,21 @@
         </div>
     </div>
 
+    <div class="paging"  >
+    <nav aria-label="Page" >
+        <ul class="pagination ">
+            <li v-if="current_page != 1  " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(-1)">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" >...</a></li>
+            <li class="page-item"><a class="page-link" href="#">{[pages]}</a></li>
+            <li v-if="pages > current_page " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(1)">Next</a></li>
+            <li class="page-item"><button v-on:click.prevent="gotoPage()" class="page-link" >Go</button></li>
+            <li class="page-item"><input style="width: 100px;" type="number" id="gotoPage" class="page-link"></li>
+        </ul>
+    </nav>
+</div>
+
+
 </section>
 
 
@@ -151,6 +171,5 @@
 
 
 <script src="{% static 'nepenthes_overview.js' %}"></script>
-
 
 </body>

@@ -2,22 +2,24 @@
     object-fit: cover;
 }
 
-.card-header{
+.card-header {
     display: flex;
     height: 100%;
     align-items: center;
     justify-content: center;
-    h4{
+
+h4 {
     flex: 1;
-  }
+}
+
 }
 * {
     box-sizing: border-box
 }
 
-.div-inline{
+.div-inline {
 
-    display:inline-block;
+    display: inline-block;
 }
 
 #search {
@@ -47,9 +49,9 @@ select,
     height: 40px
 }
 
-.div-inline{
+.div-inline {
 
-    display:inline-block;
+    display: inline-block;
 }
 
 nav {
@@ -89,8 +91,7 @@ h6 {
 }
 
 
-
-@media(min-width:1200px) {
+@media (min-width: 1200px) {
     #search {
         width: 300px;
         padding: 5px;
@@ -103,7 +104,6 @@ h6 {
     }
 
 
-
     .text {
         display: none
     }
@@ -114,6 +114,11 @@ h6 {
         float: left
     }
 
+    .paging {
+        padding-left: 50%;
+        font-size: xx-large;
+        padding-top: 50px;
+    }
 
     .filter,
     #mobile-filter {
@@ -121,7 +126,17 @@ h6 {
     }
 }
 
-@media(min-width:992px) and (max-width:1199px) {
+@media (min-width: 992px) and (max-width: 1199px) {
+    body {
+        background-color: red;
+    }
+
+    .paging {
+        padding-left: 40%;
+        font-size: xx-large;
+        padding-top: 50px;
+    }
+
     #search {
         width: 300px;
         padding: 5px;
@@ -145,33 +160,72 @@ h6 {
     }
 }
 
-@media(min-width:768px) and (max-width:991px) {
+@media (min-width: 768px) and (max-width: 991px) {
+
+    body {
+        background: linear-gradient(to bottom, #000428, #004683);
+    }
+
+
+    .paging {
+        padding-left: 20%;
+        font-size: xx-large;
+        padding-top: 50px;
+    }
+
+    #burgundy {
+        font-size: xx-large;
+    }
+
     #search {
-        width: 300px;
+        width: 20rem;
         padding: 5px;
-        padding-left: 20px
+        padding-left: 1rem;
+        font-size: xx-large;
+
     }
 
     .text {
         display: none
+    }
+
+    .col-md-10 {
+        width: 40rem;
+        margin-bottom: 10px;
+    }
+
+    .list-group {
+        font-size: xx-large;
+    }
+
+    .card-header {
+        font-size: xx-large;
+    }
+
+    .custom_element {
+        font-size: xx-large;
     }
 
     #sidebar {
-        width: 35%;
-        padding: 20px;
-        float: left
-    }
-
-
-    .filter,
-    #mobile-filter {
         display: none
     }
+
+    .filter {
+        margin-left: 70%;
+        margin-top: 2%
+    }
+
 }
 
-@media(min-width:576px) and (max-width:767px) {
-    .text {
-        display: none
+@media (min-width: 576px) and (max-width: 767px) {
+
+    body {
+        background-color: blue;
+    }
+
+    .paging {
+        padding-left: 7%;
+        font-size: xx-large
     }
 
     #search {
@@ -185,21 +239,38 @@ h6 {
         font-size: 18px
     }
 
-    #sidebar {
-        width: 40%;
-        padding: 20px;
-        float: left
+
+    .col-ms-10 {
+        width: 40rem;
+        margin-bottom: 10px;
     }
 
+    .custom_element {
+        font-size: x-large;
+    }
 
-    .filter,
-    #mobile-filter {
-        display: none;
+    #sidebar {
+        display: none
+    }
+
+    .filter {
+        margin-left: 70%;
+        margin-top: 2%
     }
 }
 
-@media(max-width:575px) {
+@media (max-width: 575px) {
+    body {
 
+        background: black;
+
+    }
+
+    .search-nav-item {
+        margin: 0;
+        width: 100%;
+        margin-top: 10px
+    }
 
     #search {
         width: 80%;
@@ -219,6 +290,12 @@ h6 {
 
     .filter {
         margin-left: 70%;
+        margin-top: 2%
+    }
+
+    #sorting,
+    #res {
+        font-size: 12px;
         margin-top: 2%
     }
 
