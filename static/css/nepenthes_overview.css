@@ -114,11 +114,7 @@ h6 {
         float: left
     }
 
-    .paging {
-        padding-left: 50%;
-        font-size: xx-large;
-        padding-top: 50px;
-    }
+
 
     .filter,
     #mobile-filter {
@@ -131,11 +127,7 @@ h6 {
         background-color: red;
     }
 
-    .paging {
-        padding-left: 40%;
-        font-size: xx-large;
-        padding-top: 50px;
-    }
+
 
     #search {
         width: 300px;
@@ -167,11 +159,6 @@ h6 {
     }
 
 
-    .paging {
-        padding-left: 20%;
-        font-size: xx-large;
-        padding-top: 50px;
-    }
 
     #burgundy {
         font-size: xx-large;
@@ -221,11 +208,6 @@ h6 {
 
     body {
         background-color: blue;
-    }
-
-    .paging {
-        padding-left: 7%;
-        font-size: xx-large
     }
 
     #search {

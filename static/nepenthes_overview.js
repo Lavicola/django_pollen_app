@@ -43,15 +43,21 @@ new Vue({
                 .then((response) => {
                     this.all_nepenthes = response.data;
                     this.filtert_nepenthes = this.all_nepenthes;
-                    this.pages = Math.trunc(this.all_nepenthes.length / this.perPage)+1;
+                    this.pages = Math.trunc(this.all_nepenthes.length / this.perPage);
+                    this.pages = this.pages == 0 ? 1 : this.pages
                     this.updatePage(1);
 
+                }).catch(error =>
+                {
+                    console.log(error);
                 })
         },
         updatePage: function (counter) {
             items = [];
-            if(counter){
+            if(counter == 1 || counter == -1){
                 this.current_page += counter;
+            }else{
+                this.current_page = counter;
             }
 
             console.log(this.current_page);
@@ -64,8 +70,8 @@ new Vue({
         },
         gotoPage: function () {
                 let page  = document.getElementById("gotoPage").value;
-                this.current_page = parseInt(page);
-                this.updatePage(false);
+            this.current_page = parseInt(page);
+            this.updatePage(this.current_page);
 
                 },
         getSearchResults: function () {

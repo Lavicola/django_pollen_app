@@ -92,7 +92,7 @@
     </div>
     <div class="container">
 
-        <div class="row">
+        <div class="row d-flex justify-content-center">
             <div class="col-sm-10 col-md-10 col-lg-6 col-xl-6" v-for="nep in nepenthes">
                 <div class="card h-100">
                     <div class="ratio ratio-1x1">
@@ -140,26 +140,25 @@
 
 
                 </div>
-            </div>
 
 
         </div>
+            <div class="d-flex justify-content-center pt-5 paging"  >
+                <nav aria-label="Page" >
+                    <ul class="pagination ">
+                        <li v-if="current_page != 1  " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(-1)">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" >...</a></li>
+                        <li class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(pages)">{[pages]}</a></li>
+                        <li v-if="pages > current_page " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(1)">Next</a></li>
+                        <li class="page-item"><button v-on:click.prevent="gotoPage()" class="page-link" >Go</button></li>
+                        <li class="page-item"><input style="width: 100px;" type="number" id="gotoPage" class="page-link"></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
     </div>
-
-    <div class="paging"  >
-    <nav aria-label="Page" >
-        <ul class="pagination ">
-            <li v-if="current_page != 1  " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(-1)">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" >...</a></li>
-            <li class="page-item"><a class="page-link" href="#">{[pages]}</a></li>
-            <li v-if="pages > current_page " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(1)">Next</a></li>
-            <li class="page-item"><button v-on:click.prevent="gotoPage()" class="page-link" >Go</button></li>
-            <li class="page-item"><input style="width: 100px;" type="number" id="gotoPage" class="page-link"></li>
-        </ul>
-    </nav>
-</div>
-
 
 </section>
 
