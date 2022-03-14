@@ -45,35 +45,41 @@ new Vue({
                     this.filtert_nepenthes = this.all_nepenthes;
                     this.pages = Math.trunc(this.all_nepenthes.length / this.perPage);
                     this.pages = this.pages == 0 ? 1 : this.pages
-                    this.updatePage(1);
-
-                }).catch(error =>
-                {
-                    console.log(error);
-                })
+                    this.resetPage();
+                }).catch(error => {
+                console.log(error);
+            })
         },
         updatePage: function (counter) {
             items = [];
-            if(counter == 1 || counter == -1){
-                this.current_page += counter;
-            }else{
-                this.current_page = counter;
-            }
-
-            console.log(this.current_page);
-            console.log(this.pages);
-
-            for(let i=(this.current_page*this.perPage)-this.perPage; (i < this.current_page*this.perPage) && (i < this.filtert_nepenthes.length)  ;i++ ){
+            for (let i = (this.current_page * this.perPage) - this.perPage; (i < this.current_page * this.perPage) && (i < this.filtert_nepenthes.length); i++) {
                 items.push(this.filtert_nepenthes[i]);
             }
             this.nepenthes = items;
         },
-        gotoPage: function () {
-                let page  = document.getElementById("gotoPage").value;
-            this.current_page = parseInt(page);
-            this.updatePage(this.current_page);
+        gotoPage: function (pageNr) {
+            let page;
+            if(pageNr != undefined){
+                page = parseInt(pageNr);
+            }else{
+                page = document.getElementById("gotoPage").value;
+            }
+            this.current_page = page;
+            this.updatePage();
+        },
+        incrementPage: function () {
+            this.current_page++;
+            this.updatePage();
+        },
+        decrementPage: function () {
+            this.current_page--;
+            this.updatePage();
+        },
+        resetPage: function () {
+            this.current_page = 1;
+            this.updatePage();
+        },
 
-                },
         getSearchResults: function () {
             let flag = ""
             let width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
@@ -93,7 +99,7 @@ new Vue({
             let soon_blooming = document.getElementById(flag + "soon_blooming").checked;
             let usa = document.getElementById(flag + "usa").checked;
             let eu = document.getElementById(flag + "eu").checked;
-
+            let search_term = document.getElementById("search").innerText;
 
             let gender;
             let flower_status;
@@ -167,9 +173,8 @@ new Vue({
 
             }
 
-            this.filtert_nepenthes = search_results;
-
-            this.updatePage(false);
+            this.filtert_nepenthes = search_results.filter(nepenthes => nepenthes["name"].includes(search_term));
+            this.resetPage();
 
         }, sendOffer: function (id, username) {
             let csrf_token = this.getToken(this.csrfTokenName);

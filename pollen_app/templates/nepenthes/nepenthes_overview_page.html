@@ -122,8 +122,7 @@
 
 
                         <div class="input-group">
-                            <select class="form-control custom_element" :id="'dropdown_'+nep.id"
-                                    style="font-size: xx-large">
+                            <select class="form-control custom_element" :id="'dropdown_'+nep.id">
                                 <option>Select Plant</option>
                                 {% for neps in user_nepenthes %}
                                 <option value="{{ neps.id }}"
@@ -131,7 +130,7 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <span class="input-group-btn">
+                            <span class="input-group-btn custom_element">
     <button  v-on:click.prevent="sendOffer(nep.id,nep.username['username'])" class="btn btn-default drop_button" type="button" tabindex="-1"><span class="glyphicon glyphicon-remove"
                                                                                   aria-hidden="true"></span>Send</button>
   </span>
@@ -146,11 +145,11 @@
             <div class="d-flex justify-content-center pt-5 paging"  >
                 <nav aria-label="Page" >
                     <ul class="pagination ">
-                        <li v-if="current_page != 1  " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(-1)">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li v-if="current_page != 1  " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="decrementPage">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="top"  v-on:click.prevent="gotoPage(1)">1</a></li>
                         <li class="page-item"><a class="page-link" >...</a></li>
-                        <li class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(pages)">{[pages]}</a></li>
-                        <li v-if="pages > current_page " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="updatePage(1)">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="top"  v-on:click.prevent="gotoPage(pages)">{[pages]}</a></li>
+                        <li v-if="pages > current_page " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="incrementPage">Next</a></li>
                         <li class="page-item"><button v-on:click.prevent="gotoPage()" class="page-link" >Go</button></li>
                         <li class="page-item"><input style="width: 100px;" type="number" id="gotoPage" class="page-link"></li>
                     </ul>
