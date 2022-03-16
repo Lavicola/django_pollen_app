@@ -38,7 +38,7 @@
                 <tr>
                     <th scope="col">Your Plant</th>
                     <th scope="col">Requested Plant</th>
-                    <th scope="col">Image</th>
+                    <th scope="col">Further Information</th>
                     <th scope="col">User</th>
                     <th scope="col">Status</th>
                 </tr>
@@ -50,8 +50,8 @@
 
                     <th scope="row">{{ nepenthes.AUTHOR_PLANT_NAME }}</th>
                     <td class="w-25">
-                        <img src="/media/{{ nepenthes.image }}" class="img-fluid img-thumbnail">
-                    </td>
+                        <a href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">Click
+                            me!</a>                    </td>
                     <td>{{ nepenthes.username }}
                         {% if nepenthes.accepted %}
                         <br>
@@ -88,57 +88,6 @@
         </div>
     </div>
 </div>
-
-
-<script>
-
-    //not a good solution, should be implemented in vue one day
-
-    function changeStatus(id, accepted) {
-
-        element = document.getElementById("" + id);
-        if (element.innerText != "Pending") {
-            return;
-        }
-        if (accepted) {
-            element.innerText = "Accepted";
-        } else {
-            element.innerText = "Denied";
-        }
-    }
-
-
-    function updateTransaction(transactionId, isAccepted) {
-        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-        axios.defaults.xsrfCookieName = "csrftoken";
-        axios.defaults.withCredentials = true;
-
-
-        //https://www.section.io/engineering-education/ajax-request-in-django-using-axios/
-        // I dont like this solution
-        let data = new FormData();
-        data.append("transactionId", transactionId);
-        data.append("accepted", isAccepted);
-
-
-        axios.put("/api/transaction", data)
-            .then(res => {
-                    if (res.status == 201) {
-                        changeStatus(transactionId, isAccepted);
-                        console.log("nice")
-                    } else {
-                        alert("something went wrong");
-                    }
-                }
-            ) // 5
-            .catch(errors => console.log(errors)) // 6
-
-
-        return;
-    }
-
-
-</script>
 
 
 </body>

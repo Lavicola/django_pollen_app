@@ -2,8 +2,7 @@ from django.db import IntegrityError
 from django.db.models import Q
 import json
 
-from django.http import HttpResponse
-
+from django.http import HttpResponse,JsonResponse
 from pollen_app.models import Nepenthes, Feedback, Transaction
 from .Validator import validate_transaction
 from .forms import MyValidationForm
@@ -15,6 +14,7 @@ from pollen_app.models import SEX, FLOWER
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import permissions
+from user.models import CustomUser
 
 
 class NepenthesView(APIView):
@@ -98,15 +98,20 @@ class TransactionView(APIView):
             else:
                 return Response(status=409)
             try:
-                Transaction.objects.filter(id=transactionId,accepted__isnull=True).update(accepted=accepted)
+                transaction = Transaction.objects.filter(id=transactionId,accepted__isnull=True)
+                transaction.update(accepted=accepted)
             except IntegrityError as e:
                 return Response(status=409)
 
-
-
-
-
-        return Response(status=201)
+        if accepted:
+            # TODO optimize
+            transaction = Transaction.objects.filter(id=transactionId).first()
+            user_id = transaction.user_id
+            user_email = CustomUser.objects.filter(id=user_id).values_list('email', flat=True).first()
+            response = JsonResponse({'mail': user_email}, status=201)
+            return response
+        else:
+            return Response(status=201)
 
 
 

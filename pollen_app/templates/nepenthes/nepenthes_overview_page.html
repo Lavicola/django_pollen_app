@@ -55,9 +55,9 @@
     <div class="py-2 border-bottom ml-3">
         <h6 class="font-weight-bold">Filters</h6>
         <div id="orange"><span class="fa fa-minus"></span></div>
-</div>
-<div style="color:white;">
-            <div class="form-group"><input type="checkbox" id="m_species"> <label for="m_species">Species</label></div>
+    </div>
+    <div>
+        <div class="form-group"><input type="checkbox" id="m_species"> <label for="m_species">Species</label></div>
         <div class="form-group"><input type="checkbox" id="m_hybrid"> <label for="m_hybrid">Hybrids</label></div>
         <div class="form-group"><input type="checkbox" id="m_male"> <label for="m_male">Male</label></div>
         <div class="form-group"><input type="checkbox" id="m_female"> <label for="m_female">Female</label></div>
@@ -68,7 +68,7 @@
             <div class="form-group"><input type="checkbox" id="m_eu"> <label for="m_eu">EU</label>
             </div>
         </div>
-</div>
+    </div>
 
 </div>
 </div>
@@ -116,8 +116,13 @@
                                 <template v-if="nep.flower == 0 ">No Flower</template>
                                 <template v-else-if="nep.flower == 1 ">Developing</template>
                                 <template v-else="nep.flower == 2 "> Blooming</template>
-
                             </li>
+                            <li class="list-group-item">Shipping:
+                                <template v-if="nep.shipping == 0 ">USA</template>
+                                <template v-else-if="nep.shipping == 1 ">EU</template>
+                                <template v-else="nep.shipping == 2 "> International</template>
+                            </li>
+
                         </ul>
 
 
@@ -131,8 +136,9 @@
                                 {% endfor %}
                             </select>
                             <span class="input-group-btn custom_element">
-    <button  v-on:click.prevent="sendOffer(nep.id,nep.username['username'])" class="btn btn-default drop_button" type="button" tabindex="-1"><span class="glyphicon glyphicon-remove"
-                                                                                  aria-hidden="true"></span>Send</button>
+    <button v-on:click.prevent="sendOffer(nep.id,nep.username['username'])" class="btn btn-default drop_button"
+            type="button" tabindex="-1"><span class="glyphicon glyphicon-remove"
+                                              aria-hidden="true"></span>Send</button>
   </span>
                         </div>
                     </div>
@@ -141,17 +147,26 @@
                 </div>
 
 
-        </div>
-            <div class="d-flex justify-content-center pt-5 paging"  >
-                <nav aria-label="Page" >
+            </div>
+            <div class="d-flex justify-content-center pt-5 paging">
+                <nav aria-label="Page">
                     <ul class="pagination ">
-                        <li v-if="current_page != 1  " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="decrementPage">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="top"  v-on:click.prevent="gotoPage(1)">1</a></li>
-                        <li class="page-item"><a class="page-link" >...</a></li>
-                        <li class="page-item"><a class="page-link" href="top"  v-on:click.prevent="gotoPage(pages)">{[pages]}</a></li>
-                        <li v-if="pages > current_page " class="page-item"><a class="page-link" href="top"  v-on:click.prevent="incrementPage">Next</a></li>
-                        <li class="page-item"><button v-on:click.prevent="gotoPage()" class="page-link" >Go</button></li>
-                        <li class="page-item"><input style="width: 100px;" type="number" id="gotoPage" class="page-link"></li>
+                        <li v-if="current_page != 1  " class="page-item"><a class="page-link" href="top"
+                                                                            v-on:click.prevent="decrementPage">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="top" v-on:click.prevent="gotoPage(1)">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link">...</a></li>
+                        <li class="page-item"><a class="page-link" href="top" v-on:click.prevent="gotoPage(pages)">{[pages]}</a>
+                        </li>
+                        <li v-if="pages > current_page " class="page-item"><a class="page-link" href="top"
+                                                                              v-on:click.prevent="incrementPage">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <button v-on:click.prevent="gotoPage()" class="page-link">Go</button>
+                        </li>
+                        <li class="page-item"><input style="width: 100px;" type="number" id="gotoPage"
+                                                     class="page-link"></li>
                     </ul>
                 </nav>
             </div>
@@ -171,3 +186,4 @@
 <script src="{% static 'nepenthes_overview.js' %}"></script>
 
 </body>
+</html>

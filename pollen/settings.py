@@ -40,7 +40,7 @@ ALLOWED_HOSTS = ["*"]
 LOGIN_URL = "login"
 APPEND_SLASH=False
 AUTH_USER_MODEL = 'user.CustomUser'
-MEDIA_ROOT  = path.join(BASE_DIR, 'media')
+MEDIA_ROOT  = path.join(BASE_DIR, 'media/')
 MEDIA_URL = "/media/"
 
 STATIC_URL = '/static/'

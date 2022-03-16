@@ -38,7 +38,7 @@
                 <tr>
                     <th scope="col">Your Plant</th>
                     <th scope="col">Offered Plant</th>
-                    <th scope="col">Image</th>
+                    <th scope="col">Further Information</th>
                     <th scope="col">User</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -51,10 +51,20 @@
 
                     <th scope="row">{{ nepenthes.USER_PLANT_NAME }}</th>
                     <td class="w-25">
-                        <img src="/media/{{ nepenthes.image }}" class="img-fluid img-thumbnail">
+                        <a href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">Click
+                            me!</a>
                     </td>
-                    <td>{{ nepenthes.username }}</td>
+                    <td>
+                        <span id="user-{{nepenthes.id}}">
+                        {{ nepenthes.username }}
+                        {% if nepenthes.accepted %}
+                            <br>
+                            TODO insert email
+                    {% endif %}
 
+
+                    </td>
+                        </span>
                     <td> <span id="{{nepenthes.id}}">
                     {% if nepenthes.accepted %}
                     Accepted
@@ -66,19 +76,22 @@
                     </span></td>
 
                     <td style="width: 50px" class="align-middle">
-                        <div class="btn-group">
+                        <div class="btn-group btn-{{nepenthes.id}}">
+                            {% if nepenthes.accepted == NULL %}
                             <button type="button" class="btn btn-success"
-                                    onclick="updateTransaction('{{nepenthes.id}}',true);">
-                                Accept
+                                    onclick="updateTransaction('{{nepenthes.id}}',true);">Accept
                             </button>
                             <button type="button" class="btn btn-danger"
-                                    onclick="updateTransaction('{{nepenthes.id}}',false);">
-                                Deny
+                                    onclick="updateTransaction('{{nepenthes.id}}',false);">Deny
                             </button>
+                            {% else %}
+                                    <!-- Wrong functiuon TODO -->
+                            <button type="button" class="btn btn-primary"
+                                    onclick="updateTransaction('{{nepenthes.id}}',true);">Archive
+                            </button>
+                            {% endif %}
 
                         </div>
-
-
                     </td>
                 </tr>
                 {% endfor %}
@@ -95,25 +108,44 @@
 
     //not a good solution, should be implemented in vue one day
 
-    function changeStatus(id,accepted){
+    function changeStatus(id, accepted) {
 
-        element = document.getElementById(""+id);
-        if(element.innerText != "Pending"){
+        element = document.getElementById("" + id);
+        if (element.innerText != "Pending") {
             return;
         }
-        if(accepted){
+        if (accepted) {
             element.innerText = "Accepted";
-        }else{
+        } else {
             element.innerText = "Denied";
         }
     }
 
 
-    function updateTransaction(transactionId,isAccepted) {
+    function changeButton(id, class_name) {
+
+        let btn = document.createElement("button");
+        btn.innerHTML = "Archive"
+        btn.type = "button"
+        btn.className = "btn btn-primary"
+
+        const element = document.querySelector(class_name+id);
+        element.replaceWith(btn);
+
+    }
+
+    function AddContactInformation(id, id_name,mail){
+        element = document.getElementById(id_name + id);
+        element.innerText += "\n"+mail;
+
+    }
+
+
+
+    function updateTransaction(transactionId, isAccepted) {
         axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
         axios.defaults.xsrfCookieName = "csrftoken";
         axios.defaults.withCredentials = true;
-
 
 
         //https://www.section.io/engineering-education/ajax-request-in-django-using-axios/
@@ -126,8 +158,11 @@
         axios.put("/api/transaction", data)
             .then(res => {
                     if (res.status == 201) {
-                        changeStatus(transactionId,isAccepted);
-                        console.log("nice")
+                        changeStatus(transactionId, isAccepted);
+                        changeButton(transactionId, ".btn-");
+                        if(isAccepted){
+                            AddContactInformation(transactionId,"user-",res.data["mail"]);
+                        }
                     } else {
                         alert("something went wrong");
                     }

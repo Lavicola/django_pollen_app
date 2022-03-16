@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- bootstrap libs -->
+    {% block bootstrap %}
+    {% include "bootstrap.html" %}
+    {% endblock %}
+    <!-- bootstrap libs end -->
+    <link href="{% static 'css/add_nepenthes.css' %}" rel="stylesheet" type="text/css" media="all">
+    <!-- carousel slider -->
+
+
+</head>
+<body>
+<!-- Navbar -->
+{% block navbar %}
+{% include "nav.html" %}
+{% endblock %}
+<!-- Navbar End -->
+
+
+<!-- form+css taken form: https://bbbootstrap.com/snippets/bootstrap-5-user-registration-form-82669371-->
+<h1 class="d-flex justify-content-center">Transaction</h1>
+<div class="wrapper">
+    <div class="form-left">
+        <h2 class="text-uppercase">{{nepenthes_author.name}}</h2>
+        <img src="/media/{{nepenthes_author.image}}" class="card-img-top" alt="Card Image" width="500" height="600">
+    </div>
+    <div class="form-right">
+        <h2 class="text-uppercase">{{nepenthes_user.name}}</h2>
+        <img src="/media/{{nepenthes_user.image}}" class="card-img-top" alt="Card Image" width="500" height="600">
+
+
+    </div>
+</div>
+
+
+</body>
+</html>

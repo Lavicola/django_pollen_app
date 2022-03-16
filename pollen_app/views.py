@@ -2,6 +2,7 @@ from django.http import Http404, HttpResponse
 from django.template import loader
 from pollen_app.models import Nepenthes, Transaction
 from pollen_app.forms import addPlantForm
+from django.db.models import Q
 
 # Create your views here.
 from user.models import CustomUser
@@ -66,10 +67,9 @@ def nepenthes_add_page(request):
         template = loader.get_template('nepenthes/add_nepenthes.html')
         return HttpResponse(template.render(context, request))
 
-        return HttpResponse(template.render(context, request))
-
 
 def transaction_offer(request):
+    # TODO email is missing
     context = {}
     template = loader.get_template('nepenthes/transaction_offers.html')
     if request.user.is_authenticated:
@@ -95,7 +95,7 @@ def transaction_requests(request):
     template = loader.get_template('nepenthes/transaction_requests.html')
     if request.user.is_authenticated:
         offers = Transaction.objects.raw("""
-            SELECT pollen_app_transaction.id,username,t1.name as USER_PLANT_NAME,t2.image,t2.name as AUTHOR_PLANT_NAME,email,accepted
+            SELECT author_plant_id,user_plant_id,pollen_app_transaction.id,username,t1.name as USER_PLANT_NAME,t2.image,t2.name as AUTHOR_PLANT_NAME,email,accepted
             FROM pollen_app_transaction
             JOIN user_customuser  on pollen_app_transaction.author_id = user_customuser.id
             JOIN pollen_app_nepenthes t1 on pollen_app_transaction.user_plant_id=t1.id
@@ -106,6 +106,27 @@ def transaction_requests(request):
 
         context = {
             "data": offers,
+        }
+
+    return HttpResponse(template.render(context, request))
+
+
+def transaction_overview(request, author_plant_id, user_plant_id):
+    context = {}
+    template = loader.get_template('nepenthes/transaction_overview.html')
+    if request.user.is_authenticated:
+        user_id = request.user.id
+        transaction = Transaction.objects.filter(author_plant_id=author_plant_id, user_plant_id=user_plant_id).filter(
+            Q(author_id=user_id) | Q(user_id=user_id))
+        # check if transaction exists and the caller is allowed to see the transaction
+        print(transaction.count())
+        if transaction.count() != 1:
+            raise Http404("Not Allowed :(")
+        nepenthes_author = Nepenthes.objects.filter(id=author_plant_id).only("image","name").first()
+        nepenthes_user = Nepenthes.objects.filter(id=user_plant_id).only("image","name").first()
+        context = {
+            "nepenthes_author": nepenthes_author,
+            "nepenthes_user": nepenthes_user
         }
 
     return HttpResponse(template.render(context, request))
