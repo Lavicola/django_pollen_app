@@ -29,7 +29,6 @@ class SHIPPING(models.TextChoices):
     INTERNATIONAL = "2", "international"
 
 
-
 class Nepenthes(models.Model):
     id = models.AutoField(primary_key=True)
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False, null=False)
@@ -37,7 +36,6 @@ class Nepenthes(models.Model):
     description = models.CharField(
         blank=True,
         max_length=400)  # maybe someone wants to point out something interesting about his plant e.g color and so on
-
 
     flower = models.CharField(
         max_length=2,
@@ -61,7 +59,6 @@ class Nepenthes(models.Model):
     def getUsername(self):
         return CustomUser.objects.filter(id=self.owner_id).first()
 
-
     def save(self):
         # remove unnecessary word and decide whether it is a hybride or not
         fileending = "webp"
@@ -81,7 +78,9 @@ class Nepenthes(models.Model):
         output.seek(0)
 
         # change the imagefield value to be the newley modifed image value
-        self.image = InMemoryUploadedFile(output, 'ImageField', "%s.{}".format(fileending) % self.image.name.split('.')[0], 'image/{}'.format(fileending),
+        self.image = InMemoryUploadedFile(output, 'ImageField',
+                                          "%s.{}".format(fileending) % self.image.name.split('.')[0],
+                                          'image/{}'.format(fileending),
                                           sys.getsizeof(output), None)
 
         super(Nepenthes, self).save()
@@ -120,25 +119,30 @@ class Feedback(models.Model):
     )
     comment = models.CharField(max_length=100)
 
+
 class Transaction(models.Model):
     author = models.ForeignKey(CustomUser,
-                              null=False,
-                              on_delete=models.CASCADE,
-                              )  # author of the post
-    user = models.ForeignKey(CustomUser,
                                null=False,
                                on_delete=models.CASCADE,
-                                related_name = "user"
-    ) # interested party
-    author_plant = models.ForeignKey(Nepenthes,null=False,on_delete=models.CASCADE)
-    user_plant = models.ForeignKey(Nepenthes,null=False,on_delete=models.CASCADE,related_name = "user_plant")
-    accepted = models.BooleanField(null=True) # does the author accept?
+                               )  # author of the post
+    user = models.ForeignKey(CustomUser,
+                             null=False,
+                             on_delete=models.CASCADE,
+                             related_name="user"
+                             )  # interested party
+    author_plant = models.ForeignKey(Nepenthes, null=False, on_delete=models.CASCADE)
+    user_plant = models.ForeignKey(Nepenthes, null=False, on_delete=models.CASCADE, related_name="user_plant")
+    accepted = models.BooleanField(null=True)  # does the author accept?
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=["author","user","author_plant","user_plant"],name="unique_transaction")]
+        constraints = [
+            models.UniqueConstraint(fields=["author", "user", "author_plant", "user_plant"], name="unique_transaction")]
 
 
+class Blacklist(models.Model):
+    user = models.ForeignKey(CustomUser, null=False, on_delete=models.CASCADE, related_name="user_id")
+    banned_user = models.ForeignKey(CustomUser,null=False, on_delete=models.CASCADE, related_name="banned_user")
 
-
-
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=["user", "banned_user"], name="unique_bann")]
