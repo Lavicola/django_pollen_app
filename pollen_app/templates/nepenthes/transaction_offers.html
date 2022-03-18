@@ -5,6 +5,7 @@
 <head>
     <title>My Transaction Offers</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- bootstrap libs -->
     {% block bootstrap %}
@@ -38,7 +39,6 @@
                 <tr>
                     <th scope="col">Your Plant</th>
                     <th scope="col">Offered Plant</th>
-                    <th scope="col">Further Information</th>
                     <th scope="col">User</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
@@ -47,13 +47,10 @@
                 <tbody>
                 {% for nepenthes in data %}
                 <tr>
-                    <th scope="row">{{ nepenthes.AUTHOR_PLANT_NAME }}</th>
 
-                    <th scope="row">{{ nepenthes.USER_PLANT_NAME }}</th>
-                    <td class="w-25">
-                        <a href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">Click
-                            me!</a>
-                    </td>
+                <th scope="row"> <a href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">{{ nepenthes.AUTHOR_PLANT_NAME }}</a></th>
+                <th scope="row"> <a href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">{{ nepenthes.USER_PLANT_NAME }}</a></th>
+
                     <td>
                         <span id="user-{{nepenthes.id}}">
                         {{ nepenthes.username }}

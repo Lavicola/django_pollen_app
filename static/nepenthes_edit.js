@@ -11,17 +11,11 @@ include("https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js");
 include("https://unpkg.com/v-tooltip@2.0.2");
 
 new Vue({
-    el: '#nepenthes_search',
+    el: '#table',
     delimiters: ['{[', ']}'],
     data: {
         csrfTokenName: "csrftoken",
-        current_page: 0,
-        perPage: 10,
-        pages: [],
-        all_nepenthes: [],
         nepenthes: [],
-        filtert_nepenthes: [],
-        widht_limit: 991, // if it is equal smaller we use mobile filter bad solution!
     },
     mounted: function () {
         this.getNepenthes();
@@ -33,12 +27,11 @@ new Vue({
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
         },
-                getNepenthes: function () {
-            let api_base_url = '/api/nepenthes/edit';
+        getNepenthes: function () {
+            let api_base_url = '/api/nepenthes/edit/';
             axios.get(api_base_url)
                 .then((response) => {
-
-
+                    this.nepenthes = response.data;
                 }).catch(error => {
                 console.log(error);
             })

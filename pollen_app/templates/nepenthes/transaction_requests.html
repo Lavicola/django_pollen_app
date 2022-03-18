@@ -5,10 +5,11 @@
 <head>
     <title>My Transaction Offers</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- bootstrap libs -->
     {% block bootstrap %}
-    {% include "bootstrap.html" %}
+        {% include "bootstrap.html" %}
     {% endblock %}
     <!-- bootstrap libs end -->
 
@@ -26,7 +27,7 @@
 
 <!-- Navbar -->
 {% block navbar %}
-{% include "nav.html" %}
+    {% include "nav.html" %}
 {% endblock %}
 <!-- Navbar End -->
 
@@ -38,48 +39,51 @@
                 <tr>
                     <th scope="col">Your Plant</th>
                     <th scope="col">Requested Plant</th>
-                    <th scope="col">Further Information</th>
                     <th scope="col">User</th>
                     <th scope="col">Status</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for nepenthes in data %}
-                <tr>
-                    <th scope="row">{{ nepenthes.USER_PLANT_NAME }}</th>
+                    <tr>
+                        <th scope="row"><a
+                                href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">{{ nepenthes.USER_PLANT_NAME }}</a>
+                        </th>
+                        <th scope="row"><a
+                                href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">{{ nepenthes.AUTHOR_PLANT_NAME }}</a>
+                        </th>
 
-                    <th scope="row">{{ nepenthes.AUTHOR_PLANT_NAME }}</th>
-                    <td class="w-25">
-                        <a href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">Click
-                            me!</a>                    </td>
-                    <td>{{ nepenthes.username }}
-                        {% if nepenthes.accepted %}
-                        <br>
-                        <a href=
-                                   "mailto:{{nepenthes.email}}?subject=Trade Offer
+                        <td class="w-25">
+                            <a href="transaction_overview/{{ nepenthes.author_plant_id }}/{{ nepenthes.user_plant_id }}">Click
+                                me!</a></td>
+                        <td>{{ nepenthes.username }}
+                            {% if nepenthes.accepted %}
+                                <br>
+                                <a href=
+                                           "mailto:{{ nepenthes.email }}?subject=Trade Offer
                       &body=Greetings,
                       %0D%0A%0D%0A
                       I am writing to your because of my offer:
                       %0D%0A%0D%0A
-                      My {{nepenthes.USER_PLANT_NAME}} with your {{nepenthes.AUTHOR_PLANT_NAME}}
+                      My {{ nepenthes.USER_PLANT_NAME }} with your {{ nepenthes.AUTHOR_PLANT_NAME }}
                     ">Send Email</a>
-                        {% endif %}
+                            {% endif %}
 
-                    </td>
+                        </td>
 
-                    <td>
-                        {% if nepenthes.accepted %}
-                        Accepted
-                        {% elif nepenthes.accepted == False %}
-                        Denied
-                        {% else %}
-                        Pending
-                        {% endif %}
-                    </td>
+                        <td>
+                            {% if nepenthes.accepted %}
+                                Accepted
+                            {% elif nepenthes.accepted == False %}
+                                Denied
+                            {% else %}
+                                Pending
+                            {% endif %}
+                        </td>
 
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 {% endfor %}
 
 

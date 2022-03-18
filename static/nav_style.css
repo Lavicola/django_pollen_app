@@ -1,11 +1,5 @@
 /*http://www.w3bai.com/de/css/tryit.php?filename=trycss_navbar_horizontal_black */
 
-#logout_form {
-     display:inline;
-     margin:0px;
-     padding:0px;
-}
-
 ul {
     list-style-type: none;
     margin: 0;

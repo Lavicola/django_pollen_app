@@ -14,9 +14,6 @@
     <!-- bootstrap libs end -->
 
     <link href="{% static 'css/nepenthes_edit.css' %}" rel="stylesheet" type="text/css" media="all">
-    <!-- carousel slider -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-          type="text/css" media="all"/>
 
 </head>
 
@@ -31,38 +28,61 @@
 <!-- Editable table -->
 <!-- https://mdbootstrap.com/docs/b4/jquery/tables/editable/#! -->
 
-<div class="card">
+<div class="container" >
     <h3 class="card-header text-center font-weight-bold text-uppercase py-4">
         Your Nepenthes
     </h3>
     <div class="card-body">
         <div id="table" class="table-editable">
-            <table class="table table-bordered table-responsive-md table-striped text-center">
+            <table class="table table-bordered table-responsive-md table-striped text-center" >
                 <thead>
                 <tr>
-                    <th class="text-center">Nepenthes Name</th>
+                    <th class="text-center">Name</th>
                     <th class="text-center">Description</th>
                     <th class="text-center">Flower Status</th>
-                    <th class="text-center">Country</th>
-                    <th class="text-center">Sex</th>
                     <th class="text-center">Shipping</th>
+                    <th class="text-center">Sex</th>
                     <th class="text-center">Image</th>
                     <th class="text-center">Update</th>
                     <th class="text-center">Remove</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td class="pt-3-half" contenteditable="true">Aurelia Vega</td>
+                <tr v-for="nep in nepenthes">
+                    <td style="width: 15%;" class="pt-3-half" contenteditable="true" >{[nep.name]}</td>
 
-                    <td class="pt-3-half" contenteditable="true">30</td>
-                    <td class="pt-3-half" contenteditable="true">30</td>
-                    <td class="pt-3-half" contenteditable="true">Deepends</td>
-                    <td class="pt-3-half" contenteditable="true">30</td>
-                    <td class="pt-3-half" contenteditable="true">30</td>
-                    <td class="pt-3-half" contenteditable="true">Spain</td>
-                    <td><span class="table-update"><button type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button></span></td>
-                    <td><span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span></td>
+                    <td class="pt-3-half" contenteditable="true">{[description]}</td>
+                    <td class="pt-3-half" style="width: 10%;">
+                    <select name="flower_status" :id="'dropdown_flower_'+nep.id">>
+                      <option  value="0">no flower</option>
+                      <option  value="1">soo blooming</option>
+                      <option  value="2">flowering</option>
+                    </select>
+                    </td>
+                    <td style="width: 10%;" class="pt-3-half" >
+                    <select  name="flower_status" :id="'dropdown_shipping_'+nep.id">>
+                      <option  value="0">USA</option>
+                      <option  value="1">EU</option>
+                      <option  value="2">International</option>
+                    </select>
+                    </td>
+                    <td style="width: 10%;" class="pt-3-half" >
+                    <select name="flower_status" :id="'dropdown_sex_'+nep.id">>
+                      <option  value="0">Unkown</option>
+                      <option  value="1">Male</option>
+                      <option  value="2">Female</option>
+                    </select>
+                    </td>
+                    <td class="pt-3-half">
+                    <div class="image-upload">
+                        <label for="file-input">
+                            <img :src="nep.image" class="img-thumbnail" height="10px" width="100px">
+                        </label>
+                        <input id="file-input" type="file"/>
+                    </div>
+                    </td>
+                    <td style="width: 5%;"><span class="table-update"><button type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button></span></td>
+                    <td style="width: 5%;"><span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span></td>
                 </tr>
 
                 </tbody>
@@ -73,14 +93,13 @@
 <!-- Editable table -->
 
 
-<div class="image-upload">
-    <label for="file-input">
-        <img src="https://icons.iconarchive.com/icons/dtafalonso/android-lollipop/128/Downloads-icon.png"/>
-    </label>
 
-    <input id="file-input" type="file"/>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js"
+        integrity="sha512-otOZr2EcknK9a5aa3BbMR9XOjYKtxxscwyRHN6zmdXuRfJ5uApkHB7cz1laWk2g8RKLzV9qv/fl3RPwfCuoxHQ=="
+        crossorigin="anonymous"></script>
 
 
+<script src="{% static 'nepenthes_edit.js' %}"></script>
 </body>
 </html>

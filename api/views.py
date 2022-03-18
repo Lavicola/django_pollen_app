@@ -28,8 +28,6 @@ class NepenthesView(APIView):
             serializer = NepenthesSerializer(nepenthes, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
         sex = self.request.query_params.get('sex', None)
         flower_status = self.request.query_params.get('flower_status', None)
         isHybrid = self.request.query_params.get('isHybrid', None)  # 0 = false
@@ -54,6 +52,32 @@ class NepenthesView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NepenthesEditView(APIView):
+
+    def get(self, request):
+        '''
+        List every nepenthes entry.
+        '''
+        if request.user.is_authenticated:
+            nepenthes = Nepenthes.objects.filter(owner_id=request.user.id)
+            serializer = NepenthesSerializer(nepenthes, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response("", status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request):
+        if request.user.is_authenticated:
+            return Response()
+
+    def delete(self, request):
+        if request.user.is_authenticated:
+            return Response()
+
+
+
+
 
 
 class TransactionView(APIView):
