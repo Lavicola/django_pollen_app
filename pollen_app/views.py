@@ -3,6 +3,7 @@ from django.template import loader
 from pollen_app.models import Nepenthes, Transaction
 from pollen_app.forms import addPlantForm
 from django.db.models import Q
+from django.views.generic import ListView
 
 # Create your views here.
 from user.models import CustomUser
@@ -130,3 +131,14 @@ def transaction_overview(request, author_plant_id, user_plant_id):
         }
 
     return HttpResponse(template.render(context, request))
+
+
+# TODO API calls put/get/delete/vue view
+def edit_nepenthes(request):
+    context = {}
+    template = loader.get_template('nepenthes/edit_nepenthes.html')
+    return HttpResponse(template.render(context, request))
+
+
+
+
