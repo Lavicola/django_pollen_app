@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
     <!-- bootstrap libs -->
@@ -51,11 +52,12 @@
                    placeholder="Password" required>
             <div class="icon btn"><span onclick="showPassword()" class="fas fa-eye-slash"></span></div>
         </div>
-            <div class="d-flex align-items-center">
-
-        <a style="text-align: right" href="/accounts/password_reset/"><span style="padding-left: 300px;font-size: x-small" >Forgot Password?</span></a>
+            <div class="float-right">
+        <a  href="/accounts/password_reset/"><span style="float: right;font-size: small" >Forgot Password?</span></a>
             </div>
+            <div class="pt-4">
         <input class="btn btn-primary mb-3" type="submit" value="Login"/>
+            </div>
     </form>
 </div>
 
