@@ -51,7 +51,6 @@ class NepenthesView(APIView):
         serializer = NepenthesSerializer(nepenthes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class NepenthesEditView(APIView):
@@ -65,19 +64,45 @@ class NepenthesEditView(APIView):
             serializer = NepenthesSerializer(nepenthes, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
-        return Response("", status=status.HTTP_400_BAD_REQUEST)
+        return Response("", status=status.HTTP_200_OK)
+
+    def post(self, request):
+        if request.user.is_authenticated:
+            plant_id = request.POST.get('plant_id')  # the plant he selected in the dropdown menu
+            name = request.POST.get('name')  # id of the plant of the post
+            description = request.POST.get('description')  # username of the author
+            sex = request.POST.get('sex')
+            shipping = request.POST.get('shipping')
+            flower = request.POST.get('flower')
+            image = request.FILES.get('image')
+            if image:
+                # TODO bad solution
+                nepenthes = Nepenthes.objects.filter(id=plant_id).first()
+                nepenthes.image = image
+                nepenthes.save()
+
+
+
+
+
+
+        return Response("", status=status.HTTP_200_OK)
+
+
+
 
     def put(self, request):
         if request.user.is_authenticated:
-            return Response()
+            return Response("", status=status.HTTP_200_OK)
+
+    def patch(self, request):
+        if request.user.is_authenticated:
+            return Response("", status=status.HTTP_200_OK)
+
 
     def delete(self, request):
         if request.user.is_authenticated:
-            return Response()
-
-
-
-
+            return Response("", status=status.HTTP_200_OK)
 
 
 class TransactionView(APIView):

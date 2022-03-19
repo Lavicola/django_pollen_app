@@ -16,9 +16,21 @@ new Vue({
     data: {
         csrfTokenName: "csrftoken",
         nepenthes: [],
+        file_element: "",
+        dropdown_sex_element: "dropdown_sex_",
+        dropdown_shipping_element: "dropdown_shipping_",
+        dropdown_flower_element: "dropdown_flower_",
+        name_element: "name_",
+        description_element: "description_",
+        file_element: "file_",
     },
     mounted: function () {
         this.getNepenthes();
+
+        axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+        axios.defaults.xsrfCookieName = "csrftoken";
+        axios.defaults.withCredentials = true;
+
     },
     methods: {
         getToken: function (name) {
@@ -36,6 +48,60 @@ new Vue({
                 console.log(error);
             })
         },
+        updateNepenthes: function (id){
+
+            let name = document.getElementById(this.name_element+id).innerText;
+            let description = document.getElementById(this.description_element+id).innerText;
+            let sex = document.getElementById(this.dropdown_sex_element+id).value;
+            let shipping = document.getElementById(this.dropdown_shipping_element+id).value;
+            let flower = document.getElementById(this.dropdown_flower_element+id).value;
+            let file = document.getElementById(this.file_element+id).files[0];
+
+
+            console.log(file);
+
+            let formData = new FormData();
+            let csrf_token = this.getToken(this.csrfTokenName);
+
+            formData.append("plant_id", id);
+            formData.append("name", name);
+            formData.append("description", description);
+            formData.append("sex",sex);
+            formData.append("shipping", shipping);
+            formData.append("flower", flower);
+            formData.append("image", file);
+            formData.append("csrfmiddlewaretoken", csrf_token);
+
+
+
+
+        axios.put("/api/nepenthes/edit/", formData)
+            .then(res => {
+                    if (res.status == 201) {
+                        return;
+                    } else {
+                        alert("something went wrong");
+                    }
+                }
+            ) // 5
+            .catch(errors => console.log(errors)) // 6
+
+            // todo use put/patch instead post
+            axios.post('/api/nepenthes/edit/', formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }});
+
+
+
+
+        },
+        removeNepenthes: function (index){
+            // TODO delete request
+            this.$delete(this.nepenthes,index);
+            },
+
+
 }});
 
 

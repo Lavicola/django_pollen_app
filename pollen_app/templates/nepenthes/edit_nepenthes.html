@@ -48,10 +48,10 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="nep in nepenthes">
-                    <td style="width: 15%;" class="pt-3-half" contenteditable="true" >{[nep.name]}</td>
+                <tr v-for="(nep,index) in nepenthes"  :key="nepenthes.name">
+                    <td style="width: 15%;" class="pt-3-half" :id="'name_'+nep.id" contenteditable="true" >{[nep.name]}</td>
 
-                    <td class="pt-3-half" contenteditable="true">{[description]}</td>
+                    <td class="pt-3-half" :id="'description_'+nep.id" contenteditable="true"></td>
                     <td class="pt-3-half" style="width: 10%;">
                     <select name="flower_status" :id="'dropdown_flower_'+nep.id">>
                       <option  value="0">no flower</option>
@@ -60,14 +60,14 @@
                     </select>
                     </td>
                     <td style="width: 10%;" class="pt-3-half" >
-                    <select  name="flower_status" :id="'dropdown_shipping_'+nep.id">>
+                    <select  name="shipping" :id="'dropdown_shipping_'+nep.id">>
                       <option  value="0">USA</option>
                       <option  value="1">EU</option>
                       <option  value="2">International</option>
                     </select>
                     </td>
                     <td style="width: 10%;" class="pt-3-half" >
-                    <select name="flower_status" :id="'dropdown_sex_'+nep.id">>
+                    <select name="sex" :id="'dropdown_sex_'+nep.id">>
                       <option  value="0">Unkown</option>
                       <option  value="1">Male</option>
                       <option  value="2">Female</option>
@@ -75,14 +75,14 @@
                     </td>
                     <td class="pt-3-half">
                     <div class="image-upload">
-                        <label for="file-input">
-                            <img :src="nep.image" class="img-thumbnail" height="10px" width="100px">
+                        <label :for="'file_'+nep.id">
+                            <img :src="nep.image" class="img-thumbnail"   height="10px" width="100px">
                         </label>
-                        <input id="file-input" type="file"/>
+                        <input :id="'file_'+nep.id" type="file" />
                     </div>
                     </td>
-                    <td style="width: 5%;"><span class="table-update"><button type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button></span></td>
-                    <td style="width: 5%;"><span class="table-remove"><button type="button" class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span></td>
+                    <td style="width: 5%;"><span class="table-update"><button v-on:click.prevent="updateNepenthes(nep.id)" type="button" class="btn btn-info btn-rounded btn-sm my-0">Update</button></span></td>
+                    <td style="width: 5%;"><span class="table-remove"><button  v-on:click.prevent="removeNepenthes(index)" type="button" class="btn btn-danger btn-rounded btn-sm my-0">Remove</button></span></td>
                 </tr>
 
                 </tbody>

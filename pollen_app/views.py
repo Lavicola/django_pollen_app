@@ -2,7 +2,7 @@ from django.http import Http404, HttpResponse
 from django.template import loader
 from pollen_app.models import Nepenthes, Transaction
 from pollen_app.forms import addPlantForm
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.views.generic import ListView
 
 # Create your views here.
@@ -133,11 +133,28 @@ def transaction_overview(request, author_plant_id, user_plant_id):
     return HttpResponse(template.render(context, request))
 
 
-# TODO API calls put/get/delete/vue view
+# TODO API calls put/delete/vue view
 def edit_nepenthes(request):
     context = {}
     template = loader.get_template('nepenthes/edit_nepenthes.html')
     return HttpResponse(template.render(context, request))
+
+
+def nepenthes_statistics(request):
+    context = {}
+    transactions = Transaction.objects.all().values('author_plant_id').annotate(total=Count('author_plant_id')).order_by('-total')[:10]
+    top_ten = []
+    for transaction in transactions:
+        top_ten.append(transaction["author_plant_id"])
+    most_offered = []
+    transactions = Transaction.objects.all().values('user_plant_id').annotate(total=Count('user_plant_id')).order_by('-total')[:10]
+    for transaction in transactions:
+        most_offered.append(transaction["user_plant_id"])
+    #TODO you got the ids of the fav plants and now query them
+
+    template = loader.get_template('nepenthes/nepenthes_statistics.html')
+    return HttpResponse(template.render(context, request))
+
 
 
 
