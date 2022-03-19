@@ -141,16 +141,26 @@ def edit_nepenthes(request):
 
 
 def nepenthes_statistics(request):
-    context = {}
-    transactions = Transaction.objects.all().values('author_plant_id').annotate(total=Count('author_plant_id')).order_by('-total')[:10]
-    top_ten = []
-    for transaction in transactions:
-        top_ten.append(transaction["author_plant_id"])
-    most_offered = []
-    transactions = Transaction.objects.all().values('user_plant_id').annotate(total=Count('user_plant_id')).order_by('-total')[:10]
-    for transaction in transactions:
-        most_offered.append(transaction["user_plant_id"])
-    #TODO you got the ids of the fav plants and now query them
+    most_requested = Transaction.objects.raw("""
+        SELECT 1 as id, count(author_plant_id) as total, pollen_app_nepenthes.image,pollen_app_nepenthes.name
+        FROM pollen_app_transaction
+        JOIN pollen_app_nepenthes  on pollen_app_transaction.author_plant_id = pollen_app_nepenthes.id
+        GROUP by author_plant_id
+        ORDER BY total DESC
+        LIMIT 10
+        ;""")
+    most_offered = Transaction.objects.raw("""
+        SELECT pollen_app_transaction.id,count(user_plant_id) as total, pollen_app_nepenthes.image,pollen_app_nepenthes.name
+        FROM pollen_app_transaction
+        JOIN pollen_app_nepenthes  on pollen_app_transaction.user_plant_id = pollen_app_nepenthes.id
+        GROUP by user_plant_id
+        ORDER BY total DESC
+        LIMIT 10
+        ;""")
+    context = {
+        "most_requested": most_requested,
+        "most_offered": most_offered,
+    }
 
     template = loader.get_template('nepenthes/nepenthes_statistics.html')
     return HttpResponse(template.render(context, request))

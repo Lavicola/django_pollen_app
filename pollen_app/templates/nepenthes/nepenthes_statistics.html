@@ -3,7 +3,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Edit Nepenthes</title>
+    <title>Stats</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -26,12 +26,19 @@
 
 
 
+{% for plant in most_requested %}
+    <p>
+        {{ plant.name }} + {{ plant.total }} +  {{ plant.image }}
+    </p>
+{% endfor %}
 
 
+{% for plant in most_offered %}
+    <p>
+        {{ plant.name }} + {{ plant.total }} + {{ plant.image }}
+    </p>
+{% endfor %}
 
-
-
-<!-- Editable table -->
 
 
 
