@@ -50,8 +50,7 @@
                 <tbody>
                 <tr v-for="(nep,index) in nepenthes"  :key="nepenthes.name">
                     <td style="width: 15%;" class="pt-3-half" :id="'name_'+nep.id" contenteditable="true" >{[nep.name]}</td>
-
-                    <td class="pt-3-half" :id="'description_'+nep.id" contenteditable="true"></td>
+                    <td style="width: 15%;" class="pt-3-half" :id="'description_'+nep.id" contenteditable="true" >{[nep.description]}</td>
                     <td class="pt-3-half" style="width: 10%;">
                     <select name="flower_status" :id="'dropdown_flower_'+nep.id">>
                       <option  value="0">no flower</option>

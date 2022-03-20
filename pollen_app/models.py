@@ -61,14 +61,24 @@ class Nepenthes(models.Model):
 
     def save(self):
         # remove unnecessary word and decide whether it is a hybride or not
-        fileending = "webp"
-
         self.name = self.name.lower().replace("nepenthes ", "")
         if len(self.name.split(" x ")) > 1:
             self.isHybrid = True
         else:
             self.isHybrid = False
 
+        output = self.modifyImage(self.image)
+
+        # change the imagefield value to be the newley modifed image value
+        self.image = self.modifyImage(self.image)
+
+        super(Nepenthes, self).save()
+
+    def modifyImage(self, image=None):
+        fileending = "webp"
+        image = image
+        if image == None:
+            image = self.image
         im = Image.open(self.image)
         output = BytesIO()
 
@@ -77,13 +87,10 @@ class Nepenthes(models.Model):
         im.save(output, format=fileending)
         output.seek(0)
 
-        # change the imagefield value to be the newley modifed image value
-        self.image = InMemoryUploadedFile(output, 'ImageField',
-                                          "%s.{}".format(fileending) % self.image.name.split('.')[0],
-                                          'image/{}'.format(fileending),
-                                          sys.getsizeof(output), None)
-
-        super(Nepenthes, self).save()
+        return InMemoryUploadedFile(output, 'ImageField',
+                                    "%s.{}".format(fileending) % self.image.name.split('.')[0],
+                                    'image/{}'.format(fileending),
+                                    sys.getsizeof(output), None)
 
     def __str__(self):
         return self.name
@@ -142,7 +149,7 @@ class Transaction(models.Model):
 
 class Blacklist(models.Model):
     user = models.ForeignKey(CustomUser, null=False, on_delete=models.CASCADE, related_name="user_id")
-    banned_user = models.ForeignKey(CustomUser,null=False, on_delete=models.CASCADE, related_name="banned_user")
+    banned_user = models.ForeignKey(CustomUser, null=False, on_delete=models.CASCADE, related_name="banned_user")
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=["user", "banned_user"], name="unique_bann")]

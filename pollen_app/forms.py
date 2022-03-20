@@ -7,5 +7,3 @@ class addPlantForm(ModelForm):
         model = Nepenthes
         fields = ['name', 'description', 'flower', 'sex',"shipping","image"]
 
-
-

@@ -24,22 +24,61 @@
 {% endblock %}
 <!-- Navbar End -->
 
+<div class="container">
+    <div class="row">
+        <h2 class="col">Most Requested</h2>
+        <h2 class="col">Most Offered</h2>
+        <div class="w-100"></div>
+
+        {% for most_wanted, most_offered in top_of %}
+            <div class="col"> Nepenthes {{ most_wanted.name }} (
+            {% if most_wanted.sex == False %}
+                  Male
+            {% else %}
+                 Female
+           {% endif %}
+)
 
 
-{% for plant in most_requested %}
-    <p>
-        {{ plant.name }} + {{ plant.total }} +  {{ plant.image }}
-    </p>
-{% endfor %}
+
+                <br>
+                <img src="/media/{{ most_wanted.image }}" class="img-thumbnail" width="300"><br>
+                <b>Requested: {{ most_wanted.total }} </b>
+
+            </div>
+            <div class="col"> Nepenthes {{ most_offered.name }} (
+            {% if most_offered.sex == False %}
+                  Male
+            {% else %}
+                 Female
+           {% endif %}
+)
+
+            <br>
+            <img src="/media/{{ most_offered.image }}" class="img-thumbnail" width="300">
+            <br>
+            <b>Offered: {{ most_offered.total }} </b>
+
+            <div class="w-100"></div>
+                        <br>
+
+        {% endfor %}
+        </div>
+    </div>
 
 
-{% for plant in most_offered %}
-    <p>
-        {{ plant.name }} + {{ plant.total }} + {{ plant.image }}
-    </p>
-{% endfor %}
+    {% for plant in most_requested %}
+        <p>
+            {{ plant.name }} + {{ plant.total }} + {{ plant.image }}
+        </p>
+    {% endfor %}
 
 
+    {% for plant in most_offered %}
+        <p>
+            {{ plant.name }} + {{ plant.total }} + {{ plant.image }}
+        </p>
+    {% endfor %}
 
 
 </body>

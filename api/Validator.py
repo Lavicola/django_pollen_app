@@ -27,7 +27,7 @@ def validate_transaction(interested_person_id, user_plant_id, author, author_pla
         raise ValidationError("user plant does not exist!")
 
     # TODO check if user is banned
-    #blacklist_validator(author_id, interested_person_id)
+    # blacklist_validator(author_id, interested_person_id)
 
     return author_id
 
@@ -35,3 +35,22 @@ def validate_transaction(interested_person_id, user_plant_id, author, author_pla
 def blacklist_validator(user_id, banned_user_id):
     if Blacklist.objects.filter(banned_user_id=banned_user_id, user_id=user_id).count() > 0:
         raise ValidationError("plant id must be an int")
+
+
+def edit_validator(name, description, sex, shipping, flower):
+    try:
+        sex = int(sex)
+        shipping = int(shipping)
+        flower = int(flower)
+        if (sex < 0 or sex > 2 or shipping < 0 or shipping > 2 or flower < 0 or flower > 2):
+            return False
+    except ValueError:
+        return False
+
+    if (len(name) > 100):
+        return False
+
+    if (len(description) >= 400):
+        return False
+
+    return True

@@ -1,10 +1,12 @@
+import os
+from io import BytesIO
+
+from PIL import Image
 from django.db import IntegrityError
 from django.db.models import Q
-import json
-
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse
 from pollen_app.models import Nepenthes, Feedback, Transaction
-from .Validator import validate_transaction
+from .Validator import validate_transaction, edit_validator
 from .forms import MyValidationForm
 from .serializers import NepenthesSerializer, FeedbackSerializer, TransactionSerializer
 from rest_framework.response import Response
@@ -52,10 +54,9 @@ class NepenthesView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
 class NepenthesEditView(APIView):
 
-    def get(self, request):
+    def get(self, request, pk):
         '''
         List every nepenthes entry.
         '''
@@ -66,43 +67,39 @@ class NepenthesEditView(APIView):
 
         return Response("", status=status.HTTP_200_OK)
 
-    def post(self, request):
+    def put(self, request, pk):
         if request.user.is_authenticated:
-            plant_id = request.POST.get('plant_id')  # the plant he selected in the dropdown menu
-            name = request.POST.get('name')  # id of the plant of the post
-            description = request.POST.get('description')  # username of the author
+            plant_id = pk
+            name = request.POST.get('name')
+            description = request.POST.get('description')
             sex = request.POST.get('sex')
             shipping = request.POST.get('shipping')
             flower = request.POST.get('flower')
             image = request.FILES.get('image')
+            print(pk)
+            # TODO trash solution redo
+            nepenthes = Nepenthes.objects.filter(id=plant_id, owner_id=request.user.id).first()
+            if not edit_validator(name, description, sex, shipping, flower):
+                return Response(status=500)
+            else:
+                nepenthes.name = name
+                nepenthes.description = description
+                nepenthes.flower = flower
+                nepenthes.sex = sex
+                nepenthes.shipping = shipping
             if image:
-                # TODO bad solution
-                nepenthes = Nepenthes.objects.filter(id=plant_id).first()
                 nepenthes.image = image
-                nepenthes.save()
+            nepenthes.save()
+        return Response(status=200)
 
-
-
-
-
-
-        return Response("", status=status.HTTP_200_OK)
-
-
-
-
-    def put(self, request):
+    def delete(self, request, pk, format=None):
         if request.user.is_authenticated:
-            return Response("", status=status.HTTP_200_OK)
+            try:
+                Nepenthes.objects.filter(id=pk, owner_id=request.user.id).first().delete()
+            except AttributeError:
+                Response(status=500)
 
-    def patch(self, request):
-        if request.user.is_authenticated:
-            return Response("", status=status.HTTP_200_OK)
-
-
-    def delete(self, request):
-        if request.user.is_authenticated:
-            return Response("", status=status.HTTP_200_OK)
+        return Response(status=200)
 
 
 class TransactionView(APIView):
@@ -110,10 +107,8 @@ class TransactionView(APIView):
     def get(self, request):
         if request.user.is_authenticated:
             author_id = request.user.id
-            transactions = Transaction.objects.filter(author_id=author_id) .select_related("nepenthes")#all transaction offers
-
-
-
+            transactions = Transaction.objects.filter(author_id=author_id).select_related(
+                "nepenthes")  # all transaction offers
 
         return Response()
 
@@ -140,14 +135,14 @@ class TransactionView(APIView):
         if request.user.is_authenticated:
             transactionId = request.POST.get("transactionId");
             accepted = request.POST.get("accepted");
-            if accepted ==  "true":
+            if accepted == "true":
                 accepted = True
             elif accepted == "false":
                 accepted = False
             else:
                 return Response(status=409)
             try:
-                transaction = Transaction.objects.filter(id=transactionId,accepted__isnull=True)
+                transaction = Transaction.objects.filter(id=transactionId, accepted__isnull=True)
                 transaction.update(accepted=accepted)
             except IntegrityError as e:
                 return Response(status=409)
@@ -161,13 +156,3 @@ class TransactionView(APIView):
             return response
         else:
             return Response(status=201)
-
-
-
-
-
-
-
-
-
-

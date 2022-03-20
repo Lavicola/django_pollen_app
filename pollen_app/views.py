@@ -142,24 +142,25 @@ def edit_nepenthes(request):
 
 def nepenthes_statistics(request):
     most_requested = Transaction.objects.raw("""
-        SELECT 1 as id, count(author_plant_id) as total, pollen_app_nepenthes.image,pollen_app_nepenthes.name
+        SELECT 1 as id, count(author_plant_id) as total, pollen_app_nepenthes.image,pollen_app_nepenthes.name,pollen_app_nepenthes.sex
         FROM pollen_app_transaction
         JOIN pollen_app_nepenthes  on pollen_app_transaction.author_plant_id = pollen_app_nepenthes.id
         GROUP by author_plant_id
         ORDER BY total DESC
-        LIMIT 10
+        LIMIT 2
         ;""")
     most_offered = Transaction.objects.raw("""
-        SELECT pollen_app_transaction.id,count(user_plant_id) as total, pollen_app_nepenthes.image,pollen_app_nepenthes.name
+        SELECT pollen_app_transaction.id,count(user_plant_id) as total, pollen_app_nepenthes.image,pollen_app_nepenthes.name,pollen_app_nepenthes.sex
         FROM pollen_app_transaction
         JOIN pollen_app_nepenthes  on pollen_app_transaction.user_plant_id = pollen_app_nepenthes.id
         GROUP by user_plant_id
         ORDER BY total DESC
-        LIMIT 10
+        LIMIT 2
         ;""")
+    top_of = zip(most_offered, most_requested)
+
     context = {
-        "most_requested": most_requested,
-        "most_offered": most_offered,
+        "top_of": top_of,
     }
 
     template = loader.get_template('nepenthes/nepenthes_statistics.html')
