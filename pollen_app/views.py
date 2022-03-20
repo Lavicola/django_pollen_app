@@ -1,12 +1,17 @@
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import Http404, HttpResponse
 from django.template import loader
+
+from pollen import settings
 from pollen_app.models import Nepenthes, Transaction
 from pollen_app.forms import addPlantForm
 from django.db.models import Q, Count
-from django.views.generic import ListView
+from django.views.decorators.cache import cache_page
 
 # Create your views here.
 from user.models import CustomUser
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 def nepenthes_detail_page(request, nepenthes_name):
@@ -123,8 +128,8 @@ def transaction_overview(request, author_plant_id, user_plant_id):
         print(transaction.count())
         if transaction.count() != 1:
             raise Http404("Not Allowed :(")
-        nepenthes_author = Nepenthes.objects.filter(id=author_plant_id).only("image","name").first()
-        nepenthes_user = Nepenthes.objects.filter(id=user_plant_id).only("image","name").first()
+        nepenthes_author = Nepenthes.objects.filter(id=author_plant_id).only("image", "name").first()
+        nepenthes_user = Nepenthes.objects.filter(id=user_plant_id).only("image", "name").first()
         context = {
             "nepenthes_author": nepenthes_author,
             "nepenthes_user": nepenthes_user
@@ -140,6 +145,7 @@ def edit_nepenthes(request):
     return HttpResponse(template.render(context, request))
 
 
+# @cache_page(CACHE_TTL)
 def nepenthes_statistics(request):
     most_requested = Transaction.objects.raw("""
         SELECT 1 as id, count(author_plant_id) as total, pollen_app_nepenthes.image,pollen_app_nepenthes.name,pollen_app_nepenthes.sex
@@ -147,7 +153,7 @@ def nepenthes_statistics(request):
         JOIN pollen_app_nepenthes  on pollen_app_transaction.author_plant_id = pollen_app_nepenthes.id
         GROUP by author_plant_id
         ORDER BY total DESC
-        LIMIT 2
+        LIMIT 10
         ;""")
     most_offered = Transaction.objects.raw("""
         SELECT pollen_app_transaction.id,count(user_plant_id) as total, pollen_app_nepenthes.image,pollen_app_nepenthes.name,pollen_app_nepenthes.sex
@@ -155,18 +161,31 @@ def nepenthes_statistics(request):
         JOIN pollen_app_nepenthes  on pollen_app_transaction.user_plant_id = pollen_app_nepenthes.id
         GROUP by user_plant_id
         ORDER BY total DESC
-        LIMIT 2
+        LIMIT 10
         ;""")
+    transaction_requests_per_month = Transaction.objects.raw("""
+        SELECT 1 as id, COUNT(*) total_transactions, strftime('%Y-%m', created) year_month, accepted
+    FROM pollen_app_transaction
+    GROUP BY year_month,accepted
+    ORDER BY year_month
+    DESC;""")
+    total_users = CustomUser.objects.all().count()
+    male_total_nepenthes = Nepenthes.objects.all().filter(sex=0).count()
+    female_total_nepenthes = Nepenthes.objects.all().filter(sex=1).count()
+    devloping_flower_nepenthes = Nepenthes.objects.all().filter(flower=1).count()
+    flowering_nepenthes = Nepenthes.objects.all().filter(flower=2).count()
+
     top_of = zip(most_offered, most_requested)
 
     context = {
         "top_of": top_of,
+        "transactions": transaction_requests_per_month,
+        "total_users": total_users,
+        "male_total_nepenthes": male_total_nepenthes,
+        "female_total_nepenthes": female_total_nepenthes,
+        "dev_flower": devloping_flower_nepenthes,
+        "flowering": flowering_nepenthes,
     }
 
     template = loader.get_template('nepenthes/nepenthes_statistics.html')
     return HttpResponse(template.render(context, request))
-
-
-
-
-

@@ -31,28 +31,15 @@
         <div class="w-100"></div>
 
         {% for most_wanted, most_offered in top_of %}
-            <div class="col"> Nepenthes {{ most_wanted.name }} (
-            {% if most_wanted.sex == False %}
-                  Male
-            {% else %}
-                 Female
-           {% endif %}
-)
-
-
+            <div class="col"> Nepenthes {{ most_wanted.name }}
 
                 <br>
                 <img src="/media/{{ most_wanted.image }}" class="img-thumbnail" width="300"><br>
                 <b>Requested: {{ most_wanted.total }} </b>
 
             </div>
-            <div class="col"> Nepenthes {{ most_offered.name }} (
-            {% if most_offered.sex == False %}
-                  Male
-            {% else %}
-                 Female
-           {% endif %}
-)
+            <div class="col"> Nepenthes {{ most_offered.name }}
+
 
             <br>
             <img src="/media/{{ most_offered.image }}" class="img-thumbnail" width="300">
@@ -67,18 +54,53 @@
     </div>
 
 
-    {% for plant in most_requested %}
-        <p>
-            {{ plant.name }} + {{ plant.total }} + {{ plant.image }}
-        </p>
-    {% endfor %}
 
 
-    {% for plant in most_offered %}
-        <p>
-            {{ plant.name }} + {{ plant.total }} + {{ plant.image }}
-        </p>
-    {% endfor %}
+<table class="table">
+    <tr>
+      <td scope="col">Total Amount of User</td>
+      <td scope="col">{{ total_users }}</td>
+    </tr>
+
+    <tr>
+      <td scope="col">Total Amount of Male Nepenthes</td>
+      <td scope="col">{{ male_total_nepenthes }}</td>
+    </tr>
+
+    <tr>
+      <td scope="col">Total Amount of Female Nepenthes</td>
+      <td scope="col">{{ male_total_nepenthes }}</td>
+    </tr>
+
+
+    <tr>
+      <td scope="col">Nepenthes flowering right now</td>
+      <td scope="col">{{ dev_flower }}</td>
+    </tr>
+
+    <tr>
+      <td scope="col">Nepenthes developing a Flower right now</td>
+      <td scope="col">{{ flowering }}</td>
+    </tr>
+
+
+    <tr>
+      <td scope="col">Total Amount of Female Nepenthes</td>
+      <td scope="col">{{ female_total_nepenthes }}</td>
+    </tr>
+  {% for transaction in transactions %}
+    <tr>
+        <td>Total Amount of Requests in {{ transaction.year_month }}</td>
+        <td>{{ transaction.total_transactions }}</td>
+    </tr>
+          {% endfor %}
+</table>
+</div>
+
+
+
+
+
 
 
 </body>
