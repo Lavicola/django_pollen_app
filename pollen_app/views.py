@@ -170,10 +170,27 @@ def nepenthes_statistics(request):
     ORDER BY year_month
     DESC;""")
     total_users = CustomUser.objects.all().count()
-    male_total_nepenthes = Nepenthes.objects.all().filter(sex=0).count()
-    female_total_nepenthes = Nepenthes.objects.all().filter(sex=1).count()
-    devloping_flower_nepenthes = Nepenthes.objects.all().filter(flower=1).count()
-    flowering_nepenthes = Nepenthes.objects.all().filter(flower=2).count()
+    nepenthes = Nepenthes.objects.raw("""
+            SELECT 1 as id, COUNT(*) total, sex
+        FROM pollen_app_nepenthes
+        GROUP BY sex
+        ORDER BY sex
+        ASC;""")
+
+    flower = Nepenthes.objects.raw("""
+            SELECT 1 as id, COUNT(*) total, flower
+        FROM pollen_app_nepenthes
+        GROUP BY flower
+        ORDER BY flower
+        DESC;""")
+
+    nep = []
+    flow = []
+    for i in nepenthes:
+        nep.append(i.total)
+    for i in flower:
+        flow.append(i.total)
+
 
     top_of = zip(most_offered, most_requested)
 
@@ -181,10 +198,8 @@ def nepenthes_statistics(request):
         "top_of": top_of,
         "transactions": transaction_requests_per_month,
         "total_users": total_users,
-        "male_total_nepenthes": male_total_nepenthes,
-        "female_total_nepenthes": female_total_nepenthes,
-        "dev_flower": devloping_flower_nepenthes,
-        "flowering": flowering_nepenthes,
+        "nepenthes": nep,
+        "flower": flow,
     }
 
     template = loader.get_template('nepenthes/nepenthes_statistics.html')

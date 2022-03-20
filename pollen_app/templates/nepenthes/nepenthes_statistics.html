@@ -64,30 +64,25 @@
 
     <tr>
       <td scope="col">Total Amount of Male Nepenthes</td>
-      <td scope="col">{{ male_total_nepenthes }}</td>
+      <td scope="col">{{ nepenthes.0 }}</td>
     </tr>
 
     <tr>
       <td scope="col">Total Amount of Female Nepenthes</td>
-      <td scope="col">{{ male_total_nepenthes }}</td>
+      <td scope="col">{{ nepenthes.1 }}</td>
     </tr>
 
 
     <tr>
       <td scope="col">Nepenthes flowering right now</td>
-      <td scope="col">{{ dev_flower }}</td>
+      <td scope="col">{{ flower.0 }}</td>
     </tr>
 
     <tr>
       <td scope="col">Nepenthes developing a Flower right now</td>
-      <td scope="col">{{ flowering }}</td>
+      <td scope="col">{{ flower.1 }}</td>
     </tr>
 
-
-    <tr>
-      <td scope="col">Total Amount of Female Nepenthes</td>
-      <td scope="col">{{ female_total_nepenthes }}</td>
-    </tr>
   {% for transaction in transactions %}
     <tr>
         <td>Total Amount of Requests in {{ transaction.year_month }}</td>
