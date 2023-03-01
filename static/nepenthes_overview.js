@@ -59,9 +59,9 @@ new Vue({
         },
         gotoPage: function (pageNr) {
             let page;
-            if(pageNr != undefined){
+            if (pageNr != undefined) {
                 page = parseInt(pageNr);
-            }else{
+            } else {
                 page = document.getElementById("gotoPage").value;
             }
             this.current_page = page;
@@ -90,92 +90,37 @@ new Vue({
                 // desktop values
                 flag = "";
             }
+            const species = document.getElementById(flag + "species").checked;
+            const hybrid = document.getElementById(flag + "hybrid").checked;
+            const male = document.getElementById(flag + "male").checked;
+            const female = document.getElementById(flag + "female").checked;
+            const blooming = document.getElementById(flag + "blooming").checked;
+            const soon_blooming = document.getElementById(flag + "soon_blooming").checked;
+            const usa = document.getElementById(flag + "usa").checked;
+            const eu = document.getElementById(flag + "eu").checked;
+            const search_term = document.getElementById("search").innerText;
 
-            let species = document.getElementById(flag + "species").checked;
-            let hybrid = document.getElementById(flag + "hybrid").checked;
-            let male = document.getElementById(flag + "male").checked;
-            let female = document.getElementById(flag + "female").checked;
-            let blooming = document.getElementById(flag + "blooming").checked;
-            let soon_blooming = document.getElementById(flag + "soon_blooming").checked;
-            let usa = document.getElementById(flag + "usa").checked;
-            let eu = document.getElementById(flag + "eu").checked;
-            let search_term = document.getElementById("search").innerText;
-
-            let gender;
-            let flower_status;
-            let spec;
-            let shipping;
-
-            if (species == false && hybrid == true) {
-                spec = true;
-            } else if (species == true && hybrid == false) {
-                spec = false;
-            } else {
-                spec = DONT_CARE;
-            }
-
-            if (male == false && female == true) {
-                gender = SEX.female;
-            } else if (male == true && female == false) {
-                gender = SEX.male;
-            } else {
-                gender = DONT_CARE // we don´t care
-            }
-
-            if (blooming == false && soon_blooming == true) {
-                flower_status = FLOWER_STATUS.soon_flowering;
-            } else if (blooming == true && soon_blooming == false) {
-                flower_status = FLOWER_STATUS.flowering;
-            } else {
-                flower_status = DONT_CARE; // we don´t care
-            }
-
-            if (eu == false && usa == true) {
-                shipping = SHIPPING.usa;
-            } else if (eu == true && usa == false) {
-                shipping = SHIPPING.eu;
-            } else {
-                shipping = DONT_CARE; // we don´t care
-            }
+            const spec = (species && !hybrid) ? false : (!species && hybrid) ? true : DONT_CARE;
+            const gender = male ? SEX.male : (female ? SEX.female : DONT_CARE);
+            const flower_status = blooming && !soon_blooming ? FLOWER_STATUS.flowering : !blooming && soon_blooming ? FLOWER_STATUS.soon_flowering : DONT_CARE;
+            const shipping = usa ? SHIPPING.usa : (eu ? SHIPPING.eu : DONT_CARE);
 
 
             let search_results = [];
             for (const element of this.all_nepenthes) {
                 let condition = {
-                    condition1: false,
-                    condition2: false,
-                    condition3: false,
-                    condition4: false,
+                    condition1: element.isHybrid === spec || spec === DONT_CARE,
+                    condition2: element.sex === gender || gender === DONT_CARE,
+                    condition3: element.flower === flower_status || flower_status === DONT_CARE,
+                    condition4: element.shipping === shipping || shipping === DONT_CARE
                 }
-
-
-                if (element["isHybrid"] == spec || spec === DONT_CARE) {
-                    condition.condition1 = true;
-                }
-
-                if (element["sex"] == gender || gender == DONT_CARE) {
-                    condition.condition2 = true;
-                }
-
-
-                if (element["flower"] == flower_status || flower_status == DONT_CARE) {
-                    condition.condition3 = true;
-                }
-
-                if (element["shipping"] == shipping || shipping == DONT_CARE) {
-                    condition.condition4 = true;
-                }
-
-
                 if (condition.condition1 && condition.condition2 && condition.condition3 && condition.condition4) {
                     search_results.push(element);
                 }
 
             }
-
             this.filtert_nepenthes = search_results.filter(nepenthes => nepenthes["name"].includes(search_term));
             this.resetPage();
-
         }, sendOffer: function (id, username) {
             let csrf_token = this.getToken(this.csrfTokenName);
             //https://www.section.io/engineering-education/ajax-request-in-django-using-axios/

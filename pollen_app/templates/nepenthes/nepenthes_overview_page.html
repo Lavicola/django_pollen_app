@@ -5,11 +5,11 @@
 <head>
     <title>Nepenthes Mate Finder</title>
     <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- bootstrap libs -->
     {% block bootstrap %}
-    {% include "bootstrap.html" %}
+        {% include "bootstrap.html" %}
     {% endblock %}
     <!-- bootstrap libs end -->
 
@@ -26,7 +26,7 @@
 
 <!-- Navbar -->
 {% block navbar %}
-{% include "nav.html" %}
+    {% include "nav.html" %}
 {% endblock %}
 <!-- Navbar End -->
 
@@ -37,7 +37,7 @@
         <h4 id="burgundy">Filters</h4>
     </div>
     <form>
-        <div class="form-group"><input type="checkbox" id="species"> <label for="species">Species</label></div>
+        <div class="form-group"><input type="checkbox" id="species" > <label for="species">Species</label></div>
         <div class="form-group"><input type="checkbox" id="hybrid"> <label for="hybrid">Hybrids</label></div>
         <div class="form-group"><input type="checkbox" id="male"> <label for="male">Male</label></div>
         <div class="form-group"><input type="checkbox" id="female"> <label for="female">Female</label></div>
@@ -77,8 +77,9 @@
 
 <!-- products section -->
 <section id="nepenthes_search">
+    <div class="container">
     <div class="d-flex">
-        <div class="input-group rounded" style="margin-bottom: 10px;">
+        <div class="input-group rounded" style="margin-bottom: 15px;margin-top: 15px;">
 
             <input id="search" type="search" class="form-control rounded custom_element" placeholder="Search"
                    aria-label="Search"
@@ -91,11 +92,10 @@
 
         </div>
     </div>
-    <div class="container">
 
         <div class="row d-flex justify-content-center">
-            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-6" v-for="nep in nepenthes">
-                <div class="card h-100">
+            <div class="col-sm-10 col-md-10 col-lg-6 col-xl-6" style="margin-bottom: 50px;"   v-for="nep in nepenthes">
+                <div class="card h-100" style="width: 350px;">
                     <div class="ratio ratio-1x1">
                         <img :src="nep.image" class="card-img-top" alt="Card Image">
                     </div>
@@ -131,9 +131,9 @@
                             <select class="form-control custom_element" :id="'dropdown_'+nep.id">
                                 <option>Select Plant</option>
                                 {% for neps in user_nepenthes %}
-                                <option value="{{ neps.id }}"
-                                        v-if="nep.sex != {{ neps.sex }} ">{{ neps.name }}
-                                </option>
+                                    <option value="{{ neps.id }}"
+                                            v-if="nep.sex != {{ neps.sex }} ">{{ neps.name }}
+                                    </option>
                                 {% endfor %}
                             </select>
                             <span class="input-group-btn custom_element">
